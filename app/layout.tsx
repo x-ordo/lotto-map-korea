@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import ErrorBoundary from './components/ErrorBoundary';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://lotto-shrine.pages.dev'), 
@@ -44,7 +45,11 @@ export default function RootLayout({
       <head>
          <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d924cfb41cb41e34c93dab696d6a779b&libraries=services,clusterer&autoload=false"></script>
       </head>
-      <body className="bg-slate-50 overflow-hidden antialiased">{children}</body>
+      <body className="bg-slate-50 overflow-hidden antialiased">
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
+      </body>
     </html>
   );
 }
