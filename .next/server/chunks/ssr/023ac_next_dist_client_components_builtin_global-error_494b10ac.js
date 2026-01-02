@@ -1,0 +1,3 @@
+module.exports=[36043,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(68357);a.n(d("[project]/lotto-map-korea/node_modules/next/dist/client/components/builtin/global-error.js <module evaluation>"))},77934,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(68357);a.n(d("[project]/lotto-map-korea/node_modules/next/dist/client/components/builtin/global-error.js"))},51899,a=>{"use strict";a.i(36043);var b=a.i(77934);a.n(b)}];
+
+//# sourceMappingURL=023ac_next_dist_client_components_builtin_global-error_494b10ac.js.map

@@ -1,0 +1,19 @@
+{
+  "round": "1205",
+  "winningNumbers": [
+    8,
+    16,
+    28,
+    30,
+    31,
+    44
+  ],
+  "bonusNumber": 27,
+  "storeRankings": [
+    "인천 부평구 영성로 50-1 1층",
+    "충남 아산시 서해로 519-2",
+    "충북 청주시 청원구 내수로 725-1"
+  ],
+  "scrapedAt": "2026-01-02T16:22:23.704Z",
+  "source": "https://www.lottoplay.co.kr"
+}

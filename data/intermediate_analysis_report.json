@@ -1,0 +1,44 @@
+{
+  "summary": {
+    "generatedAt": "2026-01-02T16:30:54.529Z",
+    "patterns": {
+      "neighbor": {
+        "title": "이웃수 출현 빈도",
+        "insight": "최근 10회차 이내 이웃수 평균 1.5개 출현 중",
+        "topNumbers": [
+          7,
+          12,
+          33
+        ]
+      },
+      "hotNumbers": [
+        34,
+        18,
+        27
+      ],
+      "coldNumbers": [
+        9,
+        22,
+        15
+      ]
+    },
+    "recommendations": []
+  },
+  "display": [
+    {
+      "label": "연번 출현율",
+      "value": "42%",
+      "color": "#6366f1"
+    },
+    {
+      "label": "이웃수 출현율",
+      "value": "68%",
+      "color": "#f59e0b"
+    },
+    {
+      "label": "소수 출현빈도",
+      "value": "High",
+      "color": "#10b981"
+    }
+  ]
+}

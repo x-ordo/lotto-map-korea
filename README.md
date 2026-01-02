@@ -1,20 +1,44 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# 💰 Lotto Map Korea (로또명당 v2.6)
 
-# Run and deploy your AI Studio app
+> **공공데이터와 AI가 결합된 지능형 로또 명당 대시보드**  
+> 대한민국 No.1 로또 분석 플랫폼을 지향합니다.
 
-This contains everything you need to run your app locally.
+---
 
-View your app in AI Studio: https://ai.studio/apps/drive/182gySTpIhr4NEG3eR1iBMO9YYBGEJ-pW
+## 🎯 비즈니스 포지셔닝 및 전략 (Strategic Positioning)
 
-## Run Locally
+본 프로젝트는 시장의 기존 강자들을 분석하여 그들의 한계를 극복하는 독보적 포지션을 점유합니다.
 
-**Prerequisites:**  Node.js
+### 1. 경쟁 업체 분석 (Competitor Analysis)
+- **로또리치 (Lottorich)**: 고가 프리미엄 전략, 강력한 당첨 인증 중심. (한계: 높은 유료 장벽)
+- **로또플레이 (Lottoplay)**: 방대한 통계 라이브러리 및 조합 필터링 중심. (한계: 난해한 UX)
+- **로또명당 (Legacy Apps)**: 단순 지도 검색 위주. (한계: 정적 데이터 및 인사이트 부족)
 
+### 2. 우리의 성공 방정식 (Our USP)
+- **Data Transparency**: 기획재정부 5대 공공데이터를 100% 투명하게 공개하여 신뢰도 확보.
+- **AI Intelligence**: 단순 당첨 횟수가 아닌 **'판매량 대비 당첨 효율(Luck Index)'** 모델 도입.
+- **Hyper-Local UX**: 네이버 지도 연동, 스피또 실시간 잔여량 등 방문 결정에 필요한 모든 유틸리티 제공.
+- **Viral Distribution**: AI 행운 카드 공유 시스템을 통해 마케팅 비용 없는 성장을 추구.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+---
+
+## 🚀 주요 기능 (Key Features)
+- **지도(MAP)**: 전국 1등 명당 실시간 탐색 및 네이버 지도 길찾기 연동.
+- **순위(RANK)**: 전국 TOP 100 당첨 판매점 실시간 랭킹.
+- **꿈해몽(DREAM)**: AI 기반 20가지 길몽 키워드 분석 및 번호 추출.
+- **분석(REPORT)**: 공공데이터 기반 지역별/회차별 심층 분석 리포트.
+- **스피또(SPEETTO)**: 2000/1000/500 실시간 1등 잔여 수량 시각화.
+
+---
+
+## 📊 데이터 인프라 (Data ETL)
+- **수집**: Node.js(Cheerio) 및 Playwright를 활용한 전문 사이트 크롤링.
+- **분석**: Python(Pandas/Matplotlib)을 통한 정밀 통계 및 시각화.
+- **최적화**: 지오코딩 캐싱 전략 및 병렬 배치를 통한 성능 극대화.
+
+---
+
+## 🛠 향후 로드맵 (Roadmap)
+- [ ] PWA 기반 실시간 푸시 알림 (토요일 20:45)
+- [ ] 실제 사용자 당첨 인증 게시판 (Social Proof)
+- [ ] 지역별 SEO 전용 페이지 구축 (Distribution)
