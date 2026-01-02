@@ -1,0 +1,7 @@
+{
+  "name": "LottoMap Korea - Lucky Store Finder",
+  "description": "A comprehensive map-based application to find famous lottery hotspots (Myeongdang) and vendors for Lotto 6/45, Sports Toto, and Pension Lottery in South Korea, featuring AI-powered luck analysis.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
