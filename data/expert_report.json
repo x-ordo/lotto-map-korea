@@ -1,0 +1,138 @@
+{
+  "generatedAt": "2026-01-02T18:05:00.209Z",
+  "combinations": [
+    {
+      "id": 1,
+      "numbers": [
+        1,
+        9,
+        14,
+        15,
+        39,
+        43
+      ],
+      "sum": 121,
+      "oddEven": "5:1",
+      "pattern": "균형"
+    },
+    {
+      "id": 2,
+      "numbers": [
+        2,
+        14,
+        15,
+        18,
+        39,
+        43
+      ],
+      "sum": 131,
+      "oddEven": "3:3",
+      "pattern": "균형"
+    },
+    {
+      "id": 3,
+      "numbers": [
+        2,
+        12,
+        14,
+        34,
+        41,
+        43
+      ],
+      "sum": 146,
+      "oddEven": "2:4",
+      "pattern": "균형"
+    },
+    {
+      "id": 4,
+      "numbers": [
+        9,
+        12,
+        22,
+        27,
+        33,
+        39
+      ],
+      "sum": 142,
+      "oddEven": "4:2",
+      "pattern": "균형"
+    },
+    {
+      "id": 5,
+      "numbers": [
+        1,
+        12,
+        31,
+        38,
+        39,
+        43
+      ],
+      "sum": 164,
+      "oddEven": "4:2",
+      "pattern": "균형"
+    }
+  ],
+  "rawTable": [
+    {
+      "rank": 1,
+      "number": 34,
+      "frequency": 155,
+      "status": "HOT"
+    },
+    {
+      "rank": 2,
+      "number": 18,
+      "frequency": 152,
+      "status": "HOT"
+    },
+    {
+      "rank": 3,
+      "number": 27,
+      "frequency": 149,
+      "status": "HOT"
+    },
+    {
+      "rank": 4,
+      "number": 1,
+      "frequency": 146,
+      "status": "HOT"
+    },
+    {
+      "rank": 5,
+      "number": 43,
+      "frequency": 143,
+      "status": "HOT"
+    },
+    {
+      "rank": 6,
+      "number": 12,
+      "frequency": 140,
+      "status": "HOT"
+    },
+    {
+      "rank": 7,
+      "number": 5,
+      "frequency": 137,
+      "status": "HOT"
+    },
+    {
+      "rank": 8,
+      "number": 14,
+      "frequency": 134,
+      "status": "HOT"
+    },
+    {
+      "rank": 9,
+      "number": 39,
+      "frequency": 131,
+      "status": "HOT"
+    },
+    {
+      "rank": 10,
+      "number": 33,
+      "frequency": 128,
+      "status": "HOT"
+    }
+  ],
+  "totalAnalyzed": 1205
+}

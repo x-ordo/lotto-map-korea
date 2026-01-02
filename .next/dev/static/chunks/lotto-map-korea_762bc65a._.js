@@ -6,35 +6,32 @@ __turbopack_context__.s([
     "analyzeLuckLocal",
     ()=>analyzeLuckLocal
 ]);
-// [심리전] 콜드 리딩(Cold Reading) 템플릿: 누구나 자기 얘기처럼 느끼게 하는 문구
-const FORTUNE_TEMPLATES = [
+// [Market Eater] 테크-샤머니즘 서사 템플릿
+const SHAMAN_NARRATIVES = [
     {
-        text: "동쪽에서 귀인이 다가옵니다. 이번 주는 직감을 믿고 과감하게 행동하세요.",
-        keywords: "귀인,직감,과감"
+        text: "청룡의 기운이 승천하는 혈자리입니다. 동쪽에서 불어오는 재물운이 이 매장에 응축되어 있습니다.",
+        keywords: "청룡,승천,혈자리"
     },
     {
-        text: "정체된 기운이 풀리고 있습니다. 소액으로 꾸준히 도전하면 큰 흐름을 탑니다.",
-        keywords: "해소,흐름,꾸준함"
+        text: "조상의 음덕이 머무는 명당입니다. 오늘 당신의 관상과 이 매장의 지기가 공명하여 잭팟의 전조를 보입니다.",
+        keywords: "조상,공명,전조"
     },
     {
-        text: "뜻밖의 횡재수가 보입니다. 평소와 다른 번호를 선택해보는 것이 좋습니다.",
-        keywords: "횡재,변화,기회"
+        text: "화(火)의 에너지가 폭발적으로 타오르는 곳입니다. 붉은색 아이템을 소지하고 방문하면 당첨 확률이 극대화됩니다.",
+        keywords: "화기,폭발,레드"
     },
     {
-        text: "재물운이 상승 곡선을 그립니다. 잃을 것이 없는 가벼운 마음이 행운을 부릅니다.",
-        keywords: "상승,가벼움,행운"
+        text: "정체된 액운을 씻어내고 황금의 흐름을 불러오는 수(水)의 명당입니다. 오후 4시에서 6시 사이가 골든타임입니다.",
+        keywords: "황금흐름,세척,골든타임"
     },
     {
-        text: "강력한 화(火)의 기운이 느껴집니다. 숫자 9나 1이 들어간 번호를 주목하세요.",
-        keywords: "열정,숫자,집중"
+        text: "땅의 기운이 겹치는 '쌍룡'의 형국입니다. 한 번의 선택이 인생의 거대한 변곡점을 만들 강력한 기류가 감지됩니다.",
+        keywords: "쌍룡,변곡점,강력기류"
     }
 ];
 const analyzeLuckLocal = (store)=>{
-    // [Trap] 날짜 + 가게 ID = 고정된 시드값.
-    // 사용자가 "새로고침"을 해도 같은 결과가 나와야 "진짜 분석"이라고 착각한다.
-    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-    const seedString = `${store.id}-${today}-MONOPOLY`;
-    // 간단한 해시 생성 (LCG 변형)
+    const today = new Date().toISOString().slice(0, 10);
+    const seedString = `${store.id}-${today}-MARKET-EATER`;
     let hash = 0;
     for(let i = 0; i < seedString.length; i++){
         hash = (hash << 5) - hash + seedString.charCodeAt(i);
@@ -44,23 +41,20 @@ const analyzeLuckLocal = (store)=>{
         hash = (hash * 1664525 + 1013904223) % 4294967296;
         return Math.abs(hash) / 4294967296;
     };
-    // 점수 후킹: 절대 80점 밑으로 주지 마라. 고객은 기분 나쁘면 앱을 지운다.
-    const score = 80 + Math.floor(pseudoRandom() * 20);
-    // 번호 생성: 1~45 중복 제거
+    // 점수 하한선을 85점으로 상향 (더 강한 확신 부여)
+    const score = 85 + Math.floor(pseudoRandom() * 15);
     const numbers = new Set();
-    // 첫 번호는 가게 이름 길이로 생성하여 '로컬 연관성' 부여 (기만)
-    numbers.add(store.name.length * 7 % 45 + 1);
+    numbers.add(store.name.length * 13 % 45 + 1);
     while(numbers.size < 6){
         numbers.add(Math.floor(pseudoRandom() * 45) + 1);
     }
-    // 멘트 선정
-    const templateIdx = Math.floor(pseudoRandom() * FORTUNE_TEMPLATES.length);
-    const selected = FORTUNE_TEMPLATES[templateIdx];
+    const templateIdx = Math.floor(pseudoRandom() * SHAMAN_NARRATIVES.length);
+    const selected = SHAMAN_NARRATIVES[templateIdx];
     return {
         score,
-        recommendation: `행운 키워드: ${selected.keywords}`,
+        recommendation: `영험한 키워드: ${selected.keywords}`,
         luckyNumber: Array.from(numbers).sort((a, b)=>a - b),
-        insights: `${store.name}의 지기(地氣) 분석: ${selected.text}`
+        insights: `${store.name}의 영험한 기운: ${selected.text}`
     };
 };
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
@@ -2737,26 +2731,22 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$nod
 var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/chevron-right.js [app-client] (ecmascript) <export default as ChevronRight>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/map-pin.js [app-client] (ecmascript) <export default as MapPin>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/sparkles.js [app-client] (ecmascript) <export default as Sparkles>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trophy$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trophy$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/trophy.js [app-client] (ecmascript) <export default as Trophy>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$award$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Award$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/award.js [app-client] (ecmascript) <export default as Award>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trending$2d$up$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__TrendingUp$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/trending-up.js [app-client] (ecmascript) <export default as TrendingUp>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Map$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/map.js [app-client] (ecmascript) <export default as Map>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$qr$2d$code$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__QrCode$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/qr-code.js [app-client] (ecmascript) <export default as QrCode>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$locate$2d$fixed$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LocateFixed$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/locate-fixed.js [app-client] (ecmascript) <export default as LocateFixed>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$list$2d$ordered$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ListOrdered$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/list-ordered.js [app-client] (ecmascript) <export default as ListOrdered>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$info$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Info$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/info.js [app-client] (ecmascript) <export default as Info>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$external$2d$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ExternalLink$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/external-link.js [app-client] (ecmascript) <export default as ExternalLink>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle2$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/circle-check.js [app-client] (ecmascript) <export default as CheckCircle2>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/file-text.js [app-client] (ecmascript) <export default as FileText>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/zap.js [app-client] (ecmascript) <export default as Zap>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$flame$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Flame$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/flame.js [app-client] (ecmascript) <export default as Flame>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$cloud$2d$moon$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CloudMoon$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/cloud-moon.js [app-client] (ecmascript) <export default as CloudMoon>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$moon$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Moon$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/moon.js [app-client] (ecmascript) <export default as Moon>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$message$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MessageCircle$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/message-circle.js [app-client] (ecmascript) <export default as MessageCircle>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$download$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Download$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/download.js [app-client] (ecmascript) <export default as Download>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$shield$2d$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ShieldCheck$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/shield-check.js [app-client] (ecmascript) <export default as ShieldCheck>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$question$2d$mark$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__HelpCircle$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/circle-question-mark.js [app-client] (ecmascript) <export default as HelpCircle>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$share$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Share2$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/share-2.js [app-client] (ecmascript) <export default as Share2>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Lock$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/lock.js [app-client] (ecmascript) <export default as Lock>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lock$2d$open$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Unlock$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/lucide-react/dist/esm/icons/lock-open.js [app-client] (ecmascript) <export default as Unlock>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$lib$2f$luckEngine$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lotto-map-korea/lib/luckEngine.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$lib$2f$data$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lotto-map-korea/lib/data.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$data$2f$dream_mapping$2e$json__$28$json$29$__ = __turbopack_context__.i("[project]/lotto-map-korea/data/dream_mapping.json (json)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$chart$2e$js$2f$dist$2f$chart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/lotto-map-korea/node_modules/chart.js/dist/chart.js [app-client] (ecmascript) <locals>");
 ;
 var _s = __turbopack_context__.k.signature();
 'use client';
@@ -2765,6 +2755,8 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
+;
+__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$chart$2e$js$2f$dist$2f$chart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["Chart"].register(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$chart$2e$js$2f$dist$2f$chart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["CategoryScale"], __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$chart$2e$js$2f$dist$2f$chart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["LinearScale"], __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$chart$2e$js$2f$dist$2f$chart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["BarElement"], __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$chart$2e$js$2f$dist$2f$chart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["Title"], __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$chart$2e$js$2f$dist$2f$chart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["Tooltip"], __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$chart$2e$js$2f$dist$2f$chart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["Legend"], __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$chart$2e$js$2f$dist$2f$chart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["ArcElement"], __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$chart$2e$js$2f$dist$2f$chart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["PointElement"], __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$chart$2e$js$2f$dist$2f$chart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["LineElement"], __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$chart$2e$js$2f$dist$2f$chart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["Filler"]);
 const getDistance = (lat1, lon1, lat2, lon2)=>{
     const R = 6371e3;
     const a = Math.sin((lat2 - lat1) * Math.PI / 360) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin((lon2 - lon1) * Math.PI / 360) ** 2;
@@ -2777,7 +2769,6 @@ function MapInterface() {
     const [selectedStore, setSelectedStore] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [searchTerm, setSearchTerm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
     const [dreamSearch, setDreamSearch] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
-    const [minWinCount, setMinWinCount] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
     const [sortBy, setSortBy] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('WIN');
     const [isSidebarOpen, setIsSidebarOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     const [analysis, setAnalysis] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
@@ -2802,30 +2793,27 @@ function MapInterface() {
         "MapInterface.useMemo[processedStores]": ()=>{
             return __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$lib$2f$data$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MOCK_STORES"].map({
                 "MapInterface.useMemo[processedStores]": (s)=>{
-                    const luckIndex = 60 + s.winCount1st * 5 + Math.floor(Math.random() * 10);
+                    const dist = userLocation ? getDistance(userLocation.lat, userLocation.lng, s.lat, s.lng) : 100000;
                     return {
                         ...s,
-                        luckIndex: luckIndex > 100 ? 100 : luckIndex,
-                        distance: userLocation ? getDistance(userLocation.lat, userLocation.lng, s.lat, s.lng) : undefined,
-                        isLive: Math.random() > 0.7,
-                        speettoAvailable: s.winCount1st >= 2
+                        luckIndex: 75 + s.winCount1st * 3 + Math.floor(Math.random() * 5),
+                        distance: dist,
+                        // 500m 이내 접근 시 기운 활성화 (Market Eater 전략)
+                        isEnergized: dist < 500,
+                        isLive: Math.random() > 0.8
                     };
                 }
             }["MapInterface.useMemo[processedStores]"]).filter({
-                "MapInterface.useMemo[processedStores]": (s)=>{
-                    const matchSearch = s.name.includes(searchTerm) || s.address.includes(searchTerm);
-                    return matchSearch && s.winCount1st >= minWinCount;
-                }
+                "MapInterface.useMemo[processedStores]": (s)=>s.name.includes(searchTerm) || s.address.includes(searchTerm)
             }["MapInterface.useMemo[processedStores]"]).sort({
                 "MapInterface.useMemo[processedStores]": (a, b)=>{
-                    if (sortBy === 'DISTANCE' && a.distance && b.distance) return a.distance - b.distance;
+                    if (sortBy === 'DISTANCE') return (a.distance || 0) - (b.distance || 0);
                     return b.winCount1st - a.winCount1st;
                 }
             }["MapInterface.useMemo[processedStores]"]);
         }
     }["MapInterface.useMemo[processedStores]"], [
         searchTerm,
-        minWinCount,
         sortBy,
         userLocation
     ]);
@@ -2840,36 +2828,45 @@ function MapInterface() {
     ]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "MapInterface.useEffect": ()=>{
-            if (activeTab === 'MAP' && !mapRef.current) {
-                const container = document.getElementById('map-container');
-                if (container && window.kakao) {
-                    mapRef.current = new window.kakao.maps.Map(container, {
-                        center: new window.kakao.maps.LatLng(37.5665, 126.9780),
-                        level: 8
-                    });
-                }
+            if (activeTab === 'MAP' && ("TURBOPACK compile-time value", "object") !== 'undefined' && window.kakao && window.kakao.maps) {
+                window.kakao.maps.load({
+                    "MapInterface.useEffect": ()=>{
+                        const container = document.getElementById('map-container');
+                        if (container && !mapRef.current) {
+                            mapRef.current = new window.kakao.maps.Map(container, {
+                                center: new window.kakao.maps.LatLng(userLocation?.lat || 37.5665, userLocation?.lng || 126.9780),
+                                level: 8
+                            });
+                        }
+                    }
+                }["MapInterface.useEffect"]);
             }
         }
     }["MapInterface.useEffect"], [
-        activeTab
+        activeTab,
+        userLocation
     ]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "MapInterface.useEffect": ()=>{
             if (activeTab !== 'MAP' || !mapRef.current) return;
-            Object.values(markersRef.current).forEach({
-                "MapInterface.useEffect": (m)=>m.setMap(null)
-            }["MapInterface.useEffect"]);
-            markersRef.current = {};
-            processedStores.forEach({
-                "MapInterface.useEffect": (store)=>{
-                    const marker = new window.kakao.maps.Marker({
-                        position: new window.kakao.maps.LatLng(store.lat, store.lng),
-                        map: mapRef.current
-                    });
-                    window.kakao.maps.event.addListener(marker, 'click', {
-                        "MapInterface.useEffect": ()=>setSelectedStore(store)
+            window.kakao.maps.load({
+                "MapInterface.useEffect": ()=>{
+                    Object.values(markersRef.current).forEach({
+                        "MapInterface.useEffect": (m)=>m.setMap(null)
                     }["MapInterface.useEffect"]);
-                    markersRef.current[store.id] = marker;
+                    markersRef.current = {};
+                    processedStores.forEach({
+                        "MapInterface.useEffect": (store)=>{
+                            const marker = new window.kakao.maps.Marker({
+                                position: new window.kakao.maps.LatLng(store.lat, store.lng),
+                                map: mapRef.current
+                            });
+                            window.kakao.maps.event.addListener(marker, 'click', {
+                                "MapInterface.useEffect": ()=>setSelectedStore(store)
+                            }["MapInterface.useEffect"]);
+                            markersRef.current[store.id] = marker;
+                        }
+                    }["MapInterface.useEffect"]);
                 }
             }["MapInterface.useEffect"]);
         }
@@ -2877,6 +2874,35 @@ function MapInterface() {
         processedStores,
         activeTab
     ]);
+    const frequencyData = {
+        labels: [
+            '34',
+            '18',
+            '27',
+            '1',
+            '43',
+            '12',
+            '5',
+            '39'
+        ],
+        datasets: [
+            {
+                label: 'Frequency',
+                data: [
+                    152,
+                    148,
+                    145,
+                    142,
+                    140,
+                    138,
+                    135,
+                    132
+                ],
+                backgroundColor: '#4F46E5',
+                borderRadius: 10
+            }
+        ]
+    };
     const openNaverMap = (store)=>{
         window.open(`https://map.naver.com/v5/search/${encodeURIComponent(store.address)}`, 'naver_map_window');
     };
@@ -2884,139 +2910,133 @@ function MapInterface() {
         if (!selectedStore) return;
         setIsAnalyzing(true);
         setTimeout(()=>{
-            const result = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$lib$2f$luckEngine$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["analyzeLuckLocal"])(selectedStore);
-            setAnalysis(result);
+            setAnalysis((0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$lib$2f$luckEngine$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["analyzeLuckLocal"])(selectedStore));
             setIsAnalyzing(false);
-        }, 800);
+        }, 1000);
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "flex flex-col h-screen bg-slate-50 font-sans text-slate-900 overflow-hidden",
+        className: "flex flex-col h-screen bg-white font-sans text-slate-900 overflow-hidden antialiased",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
-                className: "bg-white border-b px-4 flex justify-between items-center h-16 shrink-0 z-50 shadow-sm",
+                className: "bg-white border-b px-6 flex justify-between items-center h-24 shrink-0 z-50",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-center space-x-2",
+                        className: "flex items-center space-x-4",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "bg-indigo-600 p-1.5 rounded-lg shadow-lg",
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trophy$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trophy$3e$__["Trophy"], {
-                                    className: "text-white w-5 h-5"
+                                className: "bg-black p-3 rounded-[24px] shadow-2xl shadow-indigo-500/40 animate-pulse transition-transform hover:scale-110",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__["Zap"], {
+                                    className: "text-yellow-400 w-7 h-7 fill-yellow-400"
                                 }, void 0, false, {
                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                    lineNumber: 114,
-                                    columnNumber: 17
+                                    lineNumber: 124,
+                                    columnNumber: 141
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                lineNumber: 113,
+                                lineNumber: 124,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                                        className: "text-lg font-black tracking-tighter flex items-center",
+                                        className: "text-2xl font-black tracking-tighter leading-none",
                                         children: [
-                                            "LottoMap ",
+                                            "LottoShrine ",
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "bg-red-500 text-white text-[8px] px-1 rounded ml-1 animate-pulse",
-                                                children: "PRO"
+                                                className: "text-indigo-600",
+                                                children: "."
                                             }, void 0, false, {
                                                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                lineNumber: 118,
-                                                columnNumber: 30
+                                                lineNumber: 126,
+                                                columnNumber: 95
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                        lineNumber: 117,
+                                        lineNumber: 126,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "text-[8px] text-slate-400 font-bold leading-none uppercase",
-                                        children: "Strategic Analytics"
+                                        className: "text-[10px] text-slate-400 font-black tracking-[0.3em] uppercase mt-1",
+                                        children: "Digital Destiny Guide"
                                     }, void 0, false, {
                                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                        lineNumber: 120,
+                                        lineNumber: 127,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                lineNumber: 116,
+                                lineNumber: 125,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                        lineNumber: 112,
+                        lineNumber: 123,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex space-x-1 overflow-x-auto scrollbar-hide",
+                        className: "flex space-x-2 bg-slate-100 p-1.5 rounded-[24px]",
                         children: [
                             {
                                 id: 'MAP',
                                 icon: __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Map$3e$__["Map"],
-                                label: '지도'
+                                label: '성지순례'
                             },
                             {
                                 id: 'RANK',
                                 icon: __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$list$2d$ordered$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ListOrdered$3e$__["ListOrdered"],
-                                label: '순위'
+                                label: '명예의전당'
                             },
                             {
                                 id: 'DREAM',
-                                icon: __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$cloud$2d$moon$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CloudMoon$3e$__["CloudMoon"],
-                                label: '꿈해몽'
+                                icon: __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$moon$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Moon$3e$__["Moon"],
+                                label: '꿈의계시'
                             },
                             {
-                                id: 'REPORT',
-                                icon: __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"],
-                                label: '리포트'
-                            },
-                            {
-                                id: 'QR',
-                                icon: __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$qr$2d$code$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__QrCode$3e$__["QrCode"],
-                                label: 'QR'
+                                id: 'HELP',
+                                icon: __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$question$2d$mark$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__HelpCircle$3e$__["HelpCircle"],
+                                label: '이용안내'
                             }
                         ].map((tab)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 onClick: ()=>{
                                     setActiveTab(tab.id);
                                     setSelectedStore(null);
                                 },
-                                className: `px-2 py-1 rounded-xl flex flex-col items-center min-w-[48px] transition-all ${activeTab === tab.id ? 'bg-indigo-50 text-indigo-600' : 'text-slate-400 hover:text-slate-600'}`,
+                                className: `px-5 py-2.5 rounded-[20px] flex items-center space-x-2 transition-all duration-500 ${activeTab === tab.id ? 'bg-white text-black shadow-lg scale-105' : 'text-slate-400 hover:text-slate-600'}`,
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(tab.icon, {
-                                        className: "w-5 h-5"
+                                        className: `w-4 h-4 ${activeTab === tab.id ? 'text-indigo-600' : ''}`
                                     }, void 0, false, {
                                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                        lineNumber: 136,
+                                        lineNumber: 138,
                                         columnNumber: 21
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        className: "text-[8px] font-black mt-0.5",
+                                        className: "text-xs font-black whitespace-nowrap",
                                         children: tab.label
                                     }, void 0, false, {
                                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                        lineNumber: 137,
+                                        lineNumber: 139,
                                         columnNumber: 21
                                     }, this)
                                 ]
                             }, tab.id, true, {
                                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                lineNumber: 131,
+                                lineNumber: 137,
                                 columnNumber: 17
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                        lineNumber: 123,
+                        lineNumber: 130,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                lineNumber: 111,
+                lineNumber: 122,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3030,651 +3050,347 @@ function MapInterface() {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         id: "map-container",
-                                        className: "h-full w-full bg-slate-200"
+                                        className: "h-full w-full bg-slate-100"
                                     }, void 0, false, {
                                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                        lineNumber: 147,
+                                        lineNumber: 149,
                                         columnNumber: 21
                                     }, this),
                                     !selectedStore && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
-                                        className: `absolute top-0 left-0 z-20 h-full bg-white/95 backdrop-blur-md border-r shadow-2xl transition-all duration-300 ${isSidebarOpen ? 'w-full md:w-96' : 'w-0 overflow-hidden'}`,
+                                        className: `absolute top-6 left-6 z-20 h-[calc(100%-3rem)] bg-white/90 backdrop-blur-3xl border border-white/20 rounded-[48px] shadow-[0_32px_64px_-12px_rgba(0,0,0,0.14)] transition-all duration-700 ease-in-out ${isSidebarOpen ? 'w-full md:w-[420px]' : 'w-0 overflow-hidden opacity-0'}`,
                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "flex flex-col h-full",
+                                            className: "flex flex-col h-full p-10",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "p-6 space-y-4 border-b",
+                                                    className: "space-y-8 mb-10",
                                                     children: [
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "flex justify-between items-center",
                                                             children: [
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                                                    className: "text-lg font-black tracking-tighter text-indigo-600 uppercase",
-                                                                    children: "Public Data Finder"
+                                                                    className: "text-3xl font-black tracking-tighter text-slate-900",
+                                                                    children: "영험한 매장 찾기"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                    lineNumber: 153,
-                                                                    columnNumber: 37
+                                                                    lineNumber: 154,
+                                                                    columnNumber: 84
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                                     onClick: ()=>setIsSidebarOpen(false),
-                                                                    className: "p-2 hover:bg-slate-100 rounded-full",
+                                                                    className: "p-3 bg-slate-100 rounded-full hover:bg-slate-200 transition-all",
                                                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                                                        className: "w-5 h-5"
+                                                                        className: "w-6 h-6"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
                                                                         lineNumber: 154,
-                                                                        columnNumber: 133
+                                                                        columnNumber: 290
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
                                                                     lineNumber: 154,
-                                                                    columnNumber: 37
+                                                                    columnNumber: 166
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 152,
+                                                            lineNumber: 154,
                                                             columnNumber: 33
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "relative",
+                                                            className: "relative group",
                                                             children: [
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$search$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Search$3e$__["Search"], {
-                                                                    className: "absolute left-3 top-3.5 text-slate-400 w-4 h-4"
+                                                                    className: "absolute left-6 top-5 text-slate-400 w-6 h-6 group-focus-within:text-indigo-600 transition-colors"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                    lineNumber: 157,
-                                                                    columnNumber: 37
+                                                                    lineNumber: 155,
+                                                                    columnNumber: 65
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                                                     type: "text",
-                                                                    placeholder: "지역, 가게명 검색...",
-                                                                    className: "w-full pl-10 pr-4 py-3 bg-slate-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-bold",
+                                                                    placeholder: "기운이 흐르는 지역 검색...",
+                                                                    className: "w-full pl-16 pr-6 py-5 bg-slate-100 border-none rounded-[32px] text-base focus:ring-4 focus:ring-indigo-500/10 font-black placeholder:text-slate-300 transition-all",
                                                                     value: searchTerm,
                                                                     onChange: (e)=>setSearchTerm(e.target.value)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                    lineNumber: 158,
-                                                                    columnNumber: 37
+                                                                    lineNumber: 155,
+                                                                    columnNumber: 185
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 156,
+                                                            lineNumber: 155,
                                                             columnNumber: 33
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 151,
+                                                    lineNumber: 153,
                                                     columnNumber: 31
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "flex-1 overflow-y-auto p-4 space-y-2",
+                                                    className: "flex-1 overflow-y-auto space-y-5 pr-2 scrollbar-hide pb-10",
                                                     children: processedStores.map((s)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             onClick: ()=>setSelectedStore(s),
-                                                            className: "p-4 rounded-3xl hover:bg-slate-50 border border-transparent hover:border-indigo-100 cursor-pointer transition-all flex items-center space-x-3 group relative overflow-hidden",
+                                                            className: "p-8 rounded-[48px] bg-white border border-slate-100 hover:border-indigo-500 hover:shadow-[0_24px_48px_-12px_rgba(79,70,229,0.15)] cursor-pointer transition-all duration-500 flex items-center space-x-5 group relative",
                                                             children: [
+                                                                s.isEnergized && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "absolute top-4 right-8",
+                                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                        className: "bg-red-500 text-white text-[8px] px-2 py-1 rounded-full animate-pulse font-black",
+                                                                        children: "기운 감지"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                        lineNumber: 160,
+                                                                        columnNumber: 108
+                                                                    }, this)
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                    lineNumber: 160,
+                                                                    columnNumber: 68
+                                                                }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                     className: "flex-1 min-w-0",
                                                                     children: [
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                                            className: "font-black text-sm group-hover:text-indigo-600 truncate",
+                                                                            className: "font-black text-lg group-hover:text-indigo-600 truncate mb-1",
                                                                             children: s.name
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                            lineNumber: 165,
+                                                                            lineNumber: 162,
                                                                             columnNumber: 45
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                            className: "text-[11px] text-slate-500 truncate font-medium",
+                                                                            className: "text-xs text-slate-400 truncate font-bold",
                                                                             children: s.address
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                            lineNumber: 166,
+                                                                            lineNumber: 163,
                                                                             columnNumber: 45
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                            className: "flex items-center space-x-2 mt-2",
+                                                                            className: "flex items-center space-x-3 mt-5",
                                                                             children: [
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                                    className: "text-[9px] font-black text-red-500 flex items-center bg-red-50 px-2 py-0.5 rounded-full",
-                                                                                    children: [
-                                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trophy$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trophy$3e$__["Trophy"], {
-                                                                                            className: "w-2.5 h-2.5 mr-1"
-                                                                                        }, void 0, false, {
-                                                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                                            lineNumber: 168,
-                                                                                            columnNumber: 155
-                                                                                        }, this),
-                                                                                        " 1등 ",
-                                                                                        s.winCount1st
-                                                                                    ]
-                                                                                }, void 0, true, {
-                                                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                                    lineNumber: 168,
-                                                                                    columnNumber: 49
-                                                                                }, this),
-                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                                    className: "text-[9px] font-black text-indigo-500 flex items-center bg-indigo-50 px-2 py-0.5 rounded-full",
+                                                                                    className: `text-[10px] font-black px-4 py-1.5 rounded-full flex items-center transition-colors ${s.isEnergized ? 'bg-indigo-600 text-white shadow-lg' : 'bg-slate-100 text-slate-500'}`,
                                                                                     children: [
                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__["Zap"], {
-                                                                                            className: "w-2.5 h-2.5 mr-1"
+                                                                                            className: "w-3 h-3 mr-1.5"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                                            lineNumber: 169,
-                                                                                            columnNumber: 161
+                                                                                            lineNumber: 165,
+                                                                                            columnNumber: 250
                                                                                         }, this),
-                                                                                        " Idx ",
+                                                                                        " LUCK ",
                                                                                         s.luckIndex
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                                    lineNumber: 169,
+                                                                                    lineNumber: 165,
+                                                                                    columnNumber: 49
+                                                                                }, this),
+                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                    className: "text-[10px] font-black text-slate-400",
+                                                                                    children: [
+                                                                                        (s.distance / 1000).toFixed(1),
+                                                                                        "km"
+                                                                                    ]
+                                                                                }, void 0, true, {
+                                                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                                    lineNumber: 166,
                                                                                     columnNumber: 49
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                            lineNumber: 167,
+                                                                            lineNumber: 164,
                                                                             columnNumber: 45
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                    lineNumber: 164,
+                                                                    lineNumber: 161,
                                                                     columnNumber: 41
                                                                 }, this),
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__["ChevronRight"], {
-                                                                    className: "w-4 h-4 text-slate-300"
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "bg-slate-50 p-3 rounded-[20px] group-hover:bg-indigo-600 group-hover:text-white transition-all",
+                                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__["ChevronRight"], {
+                                                                        className: "w-6 h-6"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                        lineNumber: 169,
+                                                                        columnNumber: 153
+                                                                    }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                    lineNumber: 172,
+                                                                    lineNumber: 169,
                                                                     columnNumber: 41
                                                                 }, this)
                                                             ]
-                                                        }, s.id, true, {
+                                                        }, `${s.id}-${s.address}`, true, {
                                                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 163,
+                                                            lineNumber: 159,
                                                             columnNumber: 37
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 161,
+                                                    lineNumber: 157,
                                                     columnNumber: 31
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                            lineNumber: 150,
+                                            lineNumber: 152,
                                             columnNumber: 28
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                        lineNumber: 149,
+                                        lineNumber: 151,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                lineNumber: 146,
-                                columnNumber: 17
-                            }, this),
-                            activeTab === 'RANK' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "h-full overflow-y-auto p-6 bg-white animate-in fade-in duration-500",
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "max-w-2xl mx-auto space-y-3",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "flex justify-between items-end mb-8",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                                    className: "text-2xl font-black",
-                                                    children: "당첨 횟수 순위"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 186,
-                                                    columnNumber: 29
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-[10px] text-indigo-600 font-black uppercase tracking-widest border-b-2 border-indigo-600",
-                                                    children: "Verification Complete"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 187,
-                                                    columnNumber: 29
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                            lineNumber: 185,
-                                            columnNumber: 25
-                                        }, this),
-                                        processedStores.sort((a, b)=>b.winCount1st - a.winCount1st).slice(0, 50).map((s, idx)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                onClick: ()=>{
-                                                    setSelectedStore(s);
-                                                    setActiveTab('MAP');
-                                                },
-                                                className: "flex items-center p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-indigo-200 cursor-pointer transition-all",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: `w-10 h-10 flex items-center justify-center rounded-full font-black mr-4 shrink-0 ${idx < 3 ? 'bg-yellow-400 text-white shadow-lg' : 'bg-white text-slate-400 border'}`,
-                                                        children: idx + 1
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                        lineNumber: 191,
-                                                        columnNumber: 33
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "flex-1 min-w-0",
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                                className: "font-bold truncate",
-                                                                children: s.name
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                lineNumber: 192,
-                                                                columnNumber: 65
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                className: "text-xs text-slate-500 truncate",
-                                                                children: s.address
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                lineNumber: 192,
-                                                                columnNumber: 113
-                                                            }, this)
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                        lineNumber: 192,
-                                                        columnNumber: 33
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "text-right ml-4",
-                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                            className: "text-xl font-black text-red-500",
-                                                            children: [
-                                                                s.winCount1st,
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                    className: "text-xs ml-0.5",
-                                                                    children: "회"
-                                                                }, void 0, false, {
-                                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                    lineNumber: 193,
-                                                                    columnNumber: 128
-                                                                }, this)
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 193,
-                                                            columnNumber: 66
-                                                        }, this)
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                        lineNumber: 193,
-                                                        columnNumber: 33
-                                                    }, this)
-                                                ]
-                                            }, s.id, true, {
-                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                lineNumber: 190,
-                                                columnNumber: 29
-                                            }, this))
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                    lineNumber: 184,
-                                    columnNumber: 21
-                                }, this)
-                            }, void 0, false, {
-                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                lineNumber: 183,
-                                columnNumber: 17
-                            }, this),
-                            activeTab === 'REPORT' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "h-full overflow-y-auto p-6 bg-slate-50 animate-in fade-in duration-500",
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "max-w-3xl mx-auto space-y-8 py-6",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
-                                            className: "bg-white p-10 rounded-[48px] shadow-sm border border-slate-100 text-center relative overflow-hidden",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "absolute top-0 left-0 w-full h-2 bg-indigo-600"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 204,
-                                                    columnNumber: 29
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                                    className: "text-4xl font-black tracking-tighter text-slate-900 mb-4",
-                                                    children: "비즈니스 분석 리포트"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 205,
-                                                    columnNumber: 29
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-slate-500 font-bold text-sm max-w-md mx-auto leading-relaxed",
-                                                    children: "LottoMap은 로또리치의 공신력과 로또플레이의 전문성을 지도 기반의 혁신적인 UX로 통합한 **지능형 무료 플랫폼**입니다."
-                                                }, void 0, false, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 206,
-                                                    columnNumber: 29
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                            lineNumber: 203,
-                                            columnNumber: 25
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "grid grid-cols-1 md:grid-cols-3 gap-6",
-                                            children: [
-                                                {
-                                                    title: 'Data Transparency',
-                                                    desc: '기획재정부 공공데이터 100% 활용',
-                                                    icon: __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$shield$2d$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ShieldCheck$3e$__["ShieldCheck"],
-                                                    color: 'text-green-500'
-                                                },
-                                                {
-                                                    title: 'AI Intelligence',
-                                                    desc: '판매량 대비 당첨 효율 Luck Index',
-                                                    icon: __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__["Zap"],
-                                                    color: 'text-yellow-500'
-                                                },
-                                                {
-                                                    title: 'Hyper-Local',
-                                                    desc: '네이버 지도 및 실시간 스피또 연동',
-                                                    icon: __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Map$3e$__["Map"],
-                                                    color: 'text-blue-500'
-                                                }
-                                            ].map((item, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "bg-white p-6 rounded-[32px] border border-slate-100 shadow-sm text-center",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(item.icon, {
-                                                            className: `w-10 h-10 mx-auto mb-4 ${item.color}`
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 218,
-                                                            columnNumber: 37
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                            className: "font-black text-sm mb-2",
-                                                            children: item.title
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 219,
-                                                            columnNumber: 37
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                            className: "text-[11px] text-slate-500 font-medium",
-                                                            children: item.desc
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 220,
-                                                            columnNumber: 37
-                                                        }, this)
-                                                    ]
-                                                }, i, true, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 217,
-                                                    columnNumber: 33
-                                                }, this))
-                                        }, void 0, false, {
-                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                            lineNumber: 211,
-                                            columnNumber: 25
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
-                                            className: "bg-slate-900 rounded-[48px] p-10 text-white shadow-2xl relative overflow-hidden",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "absolute bottom-0 right-0 p-6 opacity-10",
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trending$2d$up$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__TrendingUp$3e$__["TrendingUp"], {
-                                                        className: "w-48 h-48"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                        lineNumber: 226,
-                                                        columnNumber: 87
-                                                    }, this)
-                                                }, void 0, false, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 226,
-                                                    columnNumber: 29
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                    className: "text-2xl font-black mb-8 flex items-center",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$award$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Award$3e$__["Award"], {
-                                                            className: "mr-3 text-yellow-400"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 227,
-                                                            columnNumber: 88
-                                                        }, this),
-                                                        " 우리의 경쟁 포지션"
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 227,
-                                                    columnNumber: 29
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "space-y-6",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "flex items-start space-x-4",
-                                                            children: [
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                    className: "bg-indigo-600 p-3 rounded-2xl font-black text-xs",
-                                                                    children: "VS"
-                                                                }, void 0, false, {
-                                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                    lineNumber: 230,
-                                                                    columnNumber: 37
-                                                                }, this),
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                    children: [
-                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                            className: "font-black text-lg",
-                                                                            children: "Premium Free Strategy"
-                                                                        }, void 0, false, {
-                                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                            lineNumber: 232,
-                                                                            columnNumber: 41
-                                                                        }, this),
-                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                            className: "text-sm text-slate-400 mt-1",
-                                                                            children: "로또리치의 유료 당첨 정보를 공공데이터 기반으로 무료화하여 누구나 쉽게 접근 가능한 '정보의 민주화'를 실현합니다."
-                                                                        }, void 0, false, {
-                                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                            lineNumber: 233,
-                                                                            columnNumber: 41
-                                                                        }, this)
-                                                                    ]
-                                                                }, void 0, true, {
-                                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                    lineNumber: 231,
-                                                                    columnNumber: 37
-                                                                }, this)
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 229,
-                                                            columnNumber: 33
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "flex items-start space-x-4",
-                                                            children: [
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                    className: "bg-indigo-600 p-3 rounded-2xl font-black text-xs",
-                                                                    children: "VS"
-                                                                }, void 0, false, {
-                                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                    lineNumber: 237,
-                                                                    columnNumber: 37
-                                                                }, this),
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                    children: [
-                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                            className: "font-black text-lg",
-                                                                            children: "Simplified Analytics"
-                                                                        }, void 0, false, {
-                                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                            lineNumber: 239,
-                                                                            columnNumber: 41
-                                                                        }, this),
-                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                            className: "text-sm text-slate-400 mt-1",
-                                                                            children: "로또플레이의 복잡한 통계 필터를 AI가 명당 지수로 자동 변환하여, 초보자도 1초 만에 최적의 명당을 찾도록 돕습니다."
-                                                                        }, void 0, false, {
-                                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                            lineNumber: 240,
-                                                                            columnNumber: 41
-                                                                        }, this)
-                                                                    ]
-                                                                }, void 0, true, {
-                                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                    lineNumber: 238,
-                                                                    columnNumber: 37
-                                                                }, this)
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 236,
-                                                            columnNumber: 33
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 228,
-                                                    columnNumber: 29
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                            lineNumber: 225,
-                                            columnNumber: 25
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                    lineNumber: 202,
-                                    columnNumber: 21
-                                }, this)
-                            }, void 0, false, {
-                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                lineNumber: 201,
+                                lineNumber: 148,
                                 columnNumber: 17
                             }, this),
                             activeTab === 'DREAM' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "h-full overflow-y-auto p-6 bg-slate-900 text-white animate-in slide-in-from-right duration-500",
+                                className: "h-full overflow-y-auto p-12 bg-black text-white animate-in slide-in-from-right duration-700",
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "max-w-xl mx-auto space-y-8 py-10",
+                                    className: "max-w-2xl mx-auto space-y-12 py-10",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
-                                            className: "text-center space-y-4",
+                                            className: "text-center space-y-6",
                                             children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$moon$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Moon$3e$__["Moon"], {
-                                                    className: "w-12 h-12 mx-auto text-yellow-400 animate-pulse"
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "w-32 h-32 bg-indigo-600/20 rounded-[60px] flex items-center justify-center mx-auto border border-white/10 shadow-[0_0_80px_-10px_rgba(79,70,229,0.4)]",
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$moon$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Moon$3e$__["Moon"], {
+                                                        className: "w-16 h-12 text-yellow-400 animate-pulse fill-yellow-400"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                        lineNumber: 184,
+                                                        columnNumber: 196
+                                                    }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 254,
+                                                    lineNumber: 184,
                                                     columnNumber: 29
                                                 }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                                    className: "text-3xl font-black tracking-tighter",
-                                                    children: "AI 꿈 해몽 분석"
-                                                }, void 0, false, {
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "space-y-3",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                                            className: "text-6xl font-black tracking-tighter uppercase italic text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-500",
+                                                            children: "Dream Oracle"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                            lineNumber: 185,
+                                                            columnNumber: 56
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                            className: "text-indigo-300 font-black text-lg tracking-widest uppercase",
+                                                            children: "무의식의 암호를 해독하십시오."
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                            lineNumber: 185,
+                                                            columnNumber: 214
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
                                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 255,
-                                                    columnNumber: 29
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-slate-400 text-sm",
-                                                    children: "어젯밤 꿈속의 행운을 번호로 바꿔보세요."
-                                                }, void 0, false, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 256,
+                                                    lineNumber: 185,
                                                     columnNumber: 29
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                            lineNumber: 253,
+                                            lineNumber: 183,
                                             columnNumber: 25
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "relative",
+                                            className: "relative group",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$search$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Search$3e$__["Search"], {
-                                                    className: "absolute left-4 top-4 text-slate-500 w-5 h-5"
+                                                    className: "absolute left-10 top-8 text-slate-600 w-8 h-8"
                                                 }, void 0, false, {
                                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 259,
-                                                    columnNumber: 29
+                                                    lineNumber: 187,
+                                                    columnNumber: 57
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                                     type: "text",
-                                                    placeholder: "어떤 꿈을 꾸셨나요? (예: 돼지, 조상님...)",
-                                                    className: "w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-[32px] text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 font-bold placeholder:text-slate-600",
+                                                    placeholder: "어젯밤의 꿈 키워드...",
+                                                    className: "w-full pl-24 pr-10 py-8 bg-white/5 border border-white/10 rounded-[60px] text-3xl focus:ring-4 focus:ring-indigo-500/20 font-black outline-none transition-all placeholder:text-slate-800",
                                                     value: dreamSearch,
                                                     onChange: (e)=>setDreamSearch(e.target.value)
                                                 }, void 0, false, {
                                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 260,
-                                                    columnNumber: 29
+                                                    lineNumber: 187,
+                                                    columnNumber: 125
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                            lineNumber: 258,
+                                            lineNumber: 187,
                                             columnNumber: 25
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "grid grid-cols-1 gap-4",
+                                            className: "grid grid-cols-1 gap-10",
                                             children: filteredDreams.map((d, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "p-6 bg-white/5 border border-white/5 rounded-[40px] hover:bg-white/10 transition-all group",
+                                                    className: "p-12 bg-white/5 border border-white/5 rounded-[80px] hover:bg-white/10 transition-all group border-l-[20px] border-l-yellow-400/50 relative overflow-hidden",
                                                     children: [
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "flex justify-between items-start mb-4",
+                                                            className: "absolute top-0 right-0 p-8 opacity-[0.02]",
+                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__["Sparkles"], {
+                                                                className: "w-48 h-48"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                lineNumber: 191,
+                                                                columnNumber: 96
+                                                            }, this)
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                            lineNumber: 191,
+                                                            columnNumber: 37
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "flex justify-between items-start mb-10",
                                                             children: [
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                                    className: "text-xl font-black text-yellow-400",
+                                                                    className: "text-4xl font-black text-yellow-400 tracking-tighter",
                                                                     children: [
                                                                         "#",
                                                                         d.keyword
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                    lineNumber: 266,
-                                                                    columnNumber: 41
+                                                                    lineNumber: 192,
+                                                                    columnNumber: 93
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                    className: "flex space-x-1",
+                                                                    className: "flex space-x-3",
                                                                     children: d.numbers.map((n)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                            className: "w-8 h-8 flex items-center justify-center bg-indigo-600 rounded-full text-xs font-black shadow-lg",
+                                                                            className: "w-14 h-14 flex items-center justify-center bg-indigo-600 rounded-full text-xl font-black shadow-[0_8px_32px_rgba(0,0,0,0.4)]",
                                                                             children: n
-                                                                        }, n, false, {
+                                                                        }, `${d.keyword}-${n}`, false, {
                                                                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                            lineNumber: 267,
-                                                                            columnNumber: 94
+                                                                            lineNumber: 192,
+                                                                            columnNumber: 232
                                                                         }, this))
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                    lineNumber: 267,
-                                                                    columnNumber: 41
+                                                                    lineNumber: 192,
+                                                                    columnNumber: 179
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 265,
+                                                            lineNumber: 192,
                                                             columnNumber: 37
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                            className: "text-sm text-slate-300 leading-relaxed font-medium",
+                                                            className: "text-2xl text-slate-300 leading-relaxed font-bold italic",
                                                             children: [
                                                                 '"',
                                                                 d.meaning,
@@ -3682,676 +3398,572 @@ function MapInterface() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 269,
+                                                            lineNumber: 193,
                                                             columnNumber: 37
                                                         }, this)
                                                     ]
-                                                }, i, true, {
+                                                }, `dream-${i}`, true, {
                                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 264,
+                                                    lineNumber: 190,
                                                     columnNumber: 33
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                            lineNumber: 262,
+                                            lineNumber: 188,
                                             columnNumber: 25
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                    lineNumber: 252,
+                                    lineNumber: 182,
                                     columnNumber: 21
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                lineNumber: 251,
-                                columnNumber: 17
-                            }, this),
-                            activeTab === 'STATS' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "h-full overflow-y-auto p-6 bg-white animate-in slide-in-from-bottom",
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "max-w-2xl mx-auto space-y-10",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                                className: "text-xl font-black mb-6 flex items-center",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle2$3e$__["CheckCircle2"], {
-                                                        className: "mr-2 text-indigo-600"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                        lineNumber: 280,
-                                                        columnNumber: 92
-                                                    }, this),
-                                                    " 많이 나온 숫자 (최근 100회)"
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                lineNumber: 280,
-                                                columnNumber: 34
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "grid grid-cols-5 sm:grid-cols-9 gap-3",
-                                                children: [
-                                                    34,
-                                                    18,
-                                                    27,
-                                                    1,
-                                                    43,
-                                                    12,
-                                                    5,
-                                                    14,
-                                                    39
-                                                ].map((n, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "flex flex-col items-center p-2 bg-slate-50 rounded-xl",
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                className: `w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-sm shadow-md ${i < 3 ? 'bg-yellow-500' : 'bg-blue-500'}`,
-                                                                children: n
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                lineNumber: 280,
-                                                                columnNumber: 350
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                className: "text-[10px] mt-2 font-black text-slate-600",
-                                                                children: [
-                                                                    150 - i * 4,
-                                                                    "회"
-                                                                ]
-                                                            }, void 0, true, {
-                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                lineNumber: 280,
-                                                                columnNumber: 517
-                                                            }, this)
-                                                        ]
-                                                    }, n, true, {
-                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                        lineNumber: 280,
-                                                        columnNumber: 271
-                                                    }, this))
-                                            }, void 0, false, {
-                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                lineNumber: 280,
-                                                columnNumber: 165
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                        lineNumber: 280,
-                                        columnNumber: 25
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                    lineNumber: 279,
-                                    columnNumber: 21
-                                }, this)
-                            }, void 0, false, {
-                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                lineNumber: 278,
-                                columnNumber: 17
-                            }, this),
-                            activeTab === 'QR' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "h-full flex flex-col items-center justify-center p-8 bg-slate-900 text-white text-center",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$qr$2d$code$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__QrCode$3e$__["QrCode"], {
-                                        className: "w-32 h-32 text-indigo-400 mb-6 animate-pulse"
-                                    }, void 0, false, {
-                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                        lineNumber: 287,
-                                        columnNumber: 21
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                        className: "text-3xl font-black mb-4",
-                                        children: "QR 당첨 확인"
-                                    }, void 0, false, {
-                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                        lineNumber: 288,
-                                        columnNumber: 21
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                        className: "w-full max-w-xs bg-indigo-600 py-5 rounded-3xl font-black text-lg shadow-2xl active:scale-95",
-                                        children: "스캐너 실행하기"
-                                    }, void 0, false, {
-                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                        lineNumber: 289,
-                                        columnNumber: 21
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                lineNumber: 286,
+                                lineNumber: 181,
                                 columnNumber: 17
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                        lineNumber: 144,
+                        lineNumber: 146,
                         columnNumber: 9
                     }, this),
                     selectedStore && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
-                        className: "absolute inset-0 md:relative md:w-96 bg-white z-[60] animate-in slide-in-from-right duration-300 shadow-2xl flex flex-col",
+                        className: "absolute inset-0 md:relative md:w-[550px] bg-white z-[60] animate-in slide-in-from-right duration-500 shadow-[0_0_100px_rgba(0,0,0,0.2)] flex flex-col border-l border-slate-100",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "p-4 border-b flex items-center justify-between sticky top-0 bg-white/80 backdrop-blur-md",
+                                className: "p-10 border-b flex items-center justify-between sticky top-0 bg-white/90 backdrop-blur-md z-10",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         onClick: ()=>setSelectedStore(null),
-                                        className: "p-2 hover:bg-slate-100 rounded-full",
+                                        className: "p-5 hover:bg-slate-100 rounded-[32px] transition-all active:scale-90",
                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                            className: "w-6 h-6"
+                                            className: "w-10 h-10"
                                         }, void 0, false, {
                                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                            lineNumber: 297,
-                                            columnNumber: 116
+                                            lineNumber: 205,
+                                            columnNumber: 257
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                        lineNumber: 297,
-                                        columnNumber: 21
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                        className: "font-black text-xs tracking-widest uppercase text-slate-400",
-                                        children: "Store Profile"
-                                    }, void 0, false, {
-                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                        lineNumber: 298,
-                                        columnNumber: 21
+                                        lineNumber: 205,
+                                        columnNumber: 129
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "w-10"
+                                        className: "flex flex-col items-center",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                className: "font-black text-[10px] tracking-[0.5em] uppercase text-indigo-600",
+                                                children: "Sacred Profile"
+                                            }, void 0, false, {
+                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                lineNumber: 205,
+                                                columnNumber: 337
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "w-8 h-1 bg-indigo-600 mt-1 rounded-full"
+                                            }, void 0, false, {
+                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                lineNumber: 205,
+                                                columnNumber: 438
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                        lineNumber: 205,
+                                        columnNumber: 293
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        className: "p-5 hover:bg-slate-100 rounded-[32px] text-indigo-600 transition-all",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$share$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Share2$3e$__["Share2"], {
+                                            className: "w-8 h-8"
+                                        }, void 0, false, {
+                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                            lineNumber: 205,
+                                            columnNumber: 596
+                                        }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                        lineNumber: 299,
-                                        columnNumber: 21
+                                        lineNumber: 205,
+                                        columnNumber: 507
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                lineNumber: 296,
+                                lineNumber: 205,
                                 columnNumber: 17
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "p-6 overflow-y-auto flex-1 space-y-6",
+                                className: "p-12 overflow-y-auto flex-1 space-y-12 scrollbar-hide pb-32",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+                                        className: "space-y-8",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "flex items-center space-x-2 mb-3",
+                                                className: "flex items-center space-x-3",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                        className: "px-2 py-0.5 bg-red-600 text-white text-[9px] font-black rounded-full flex items-center",
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                className: "w-1.5 h-1.5 bg-white rounded-full mr-1 animate-ping"
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                lineNumber: 302,
-                                                                columnNumber: 185
-                                                            }, this),
-                                                            " LIVE"
-                                                        ]
-                                                    }, void 0, true, {
+                                                        className: "px-5 py-2 bg-black text-white text-[10px] font-black rounded-full shadow-2xl",
+                                                        children: "LEVEL 1 SHRINE"
+                                                    }, void 0, false, {
                                                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                        lineNumber: 302,
-                                                        columnNumber: 80
+                                                        lineNumber: 209,
+                                                        columnNumber: 29
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                        className: "px-2 py-0.5 bg-indigo-100 text-indigo-600 text-[9px] font-black rounded-full",
+                                                        className: `px-5 py-2 text-[10px] font-black rounded-full border flex items-center ${selectedStore.isEnergized ? 'bg-indigo-600 text-white border-indigo-600 shadow-lg shadow-indigo-200' : 'bg-slate-50 text-slate-400 border-slate-100'}`,
                                                         children: [
-                                                            "명당지수 ",
-                                                            selectedStore.luckIndex
+                                                            selectedStore.isEnergized ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lock$2d$open$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Unlock$3e$__["Unlock"], {
+                                                                className: "w-3 h-3 mr-2 fill-white"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                lineNumber: 211,
+                                                                columnNumber: 71
+                                                            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Lock$3e$__["Lock"], {
+                                                                className: "w-3 h-3 mr-2"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                lineNumber: 211,
+                                                                columnNumber: 120
+                                                            }, this),
+                                                            selectedStore.isEnergized ? '기운 활성화됨' : '500m 이내 접근 필요'
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                        lineNumber: 302,
-                                                        columnNumber: 272
+                                                        lineNumber: 210,
+                                                        columnNumber: 29
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                lineNumber: 302,
-                                                columnNumber: 30
+                                                lineNumber: 208,
+                                                columnNumber: 25
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                                className: "text-3xl font-black text-slate-900 leading-tight",
+                                                className: "text-6xl font-black text-slate-900 leading-[1] tracking-tighter",
                                                 children: selectedStore.name
                                             }, void 0, false, {
                                                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                lineNumber: 302,
-                                                columnNumber: 419
+                                                lineNumber: 215,
+                                                columnNumber: 25
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                className: "text-sm text-slate-500 mt-3 font-medium leading-relaxed",
+                                                className: "text-xl text-slate-400 font-bold leading-relaxed flex items-start",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__["MapPin"], {
-                                                        className: "w-4 h-4 mr-1 text-slate-400 inline"
+                                                        className: "w-7 h-7 mr-4 shrink-0 text-indigo-500 mt-1"
                                                     }, void 0, false, {
                                                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                        lineNumber: 302,
-                                                        columnNumber: 580
+                                                        lineNumber: 216,
+                                                        columnNumber: 106
                                                     }, this),
                                                     selectedStore.address
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                lineNumber: 302,
-                                                columnNumber: 509
+                                                lineNumber: 216,
+                                                columnNumber: 25
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                        lineNumber: 302,
+                                        lineNumber: 207,
                                         columnNumber: 21
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "bg-gradient-to-br from-orange-400 to-red-500 rounded-[32px] p-6 text-white shadow-xl",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                className: "font-black text-lg mb-4 flex items-center",
+                                        className: `p-1 w-full rounded-[60px] transition-all duration-1000 ${selectedStore.isEnergized ? 'bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 shadow-[0_32px_64px_-12px_rgba(79,70,229,0.5)]' : 'bg-slate-200'}`,
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "bg-white rounded-[59px] p-12 text-center space-y-8",
+                                            children: !selectedStore.isEnergized ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                                                 children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$flame$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Flame$3e$__["Flame"], {
-                                                        className: "w-5 h-5 mr-2"
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "w-24 h-24 bg-slate-100 rounded-[40px] flex items-center justify-center mx-auto",
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Lock$3e$__["Lock"], {
+                                                            className: "w-10 h-10 text-slate-300"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                            lineNumber: 224,
+                                                            columnNumber: 133
+                                                        }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                        lineNumber: 303,
-                                                        columnNumber: 181
+                                                        lineNumber: 224,
+                                                        columnNumber: 37
                                                     }, this),
-                                                    " 스피또 잔여 1등"
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "space-y-3",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                                className: "text-2xl font-black tracking-tight text-slate-900",
+                                                                children: "현장 방문시 번호 공개"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                lineNumber: 226,
+                                                                columnNumber: 41
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                className: "text-slate-400 font-bold text-sm leading-relaxed",
+                                                                children: [
+                                                                    "이 매장은 현재 비활성 상태입니다.",
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
+                                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                        lineNumber: 227,
+                                                                        columnNumber: 124
+                                                                    }, this),
+                                                                    "반경 500m 이내로 접근하여 기운을 깨우세요."
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                lineNumber: 227,
+                                                                columnNumber: 41
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                        lineNumber: 225,
+                                                        columnNumber: 37
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                        onClick: ()=>alert('GPS 인증을 시도합니다.'),
+                                                        className: "w-full bg-slate-900 text-white font-black py-6 rounded-[32px] flex items-center justify-center space-x-3 active:scale-95 transition-all shadow-xl shadow-slate-200",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$locate$2d$fixed$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LocateFixed$3e$__["LocateFixed"], {
+                                                                className: "w-5 h-5"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                lineNumber: 229,
+                                                                columnNumber: 260
+                                                            }, this),
+                                                            " ",
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                children: "현장 기운 인증하기"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                lineNumber: 229,
+                                                                columnNumber: 296
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                        lineNumber: 229,
+                                                        columnNumber: 37
+                                                    }, this)
+                                                ]
+                                            }, void 0, true) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "animate-in zoom-in duration-1000 space-y-8",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "w-24 h-24 bg-indigo-600 rounded-[40px] flex items-center justify-center mx-auto shadow-2xl shadow-indigo-200",
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lock$2d$open$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Unlock$3e$__["Unlock"], {
+                                                            className: "w-10 h-10 text-white"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                            lineNumber: 233,
+                                                            columnNumber: 163
+                                                        }, this)
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                        lineNumber: 233,
+                                                        columnNumber: 37
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "space-y-3",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                                className: "text-3xl font-black tracking-tighter text-indigo-600 italic",
+                                                                children: "Destiny Unlocked !"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                lineNumber: 235,
+                                                                columnNumber: 41
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                className: "text-slate-500 font-black text-xs uppercase tracking-widest",
+                                                                children: "방문 인증 성공: 전용 행운 번호가 활성화되었습니다."
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                lineNumber: 236,
+                                                                columnNumber: 41
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                        lineNumber: 234,
+                                                        columnNumber: 37
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "flex justify-between px-4",
+                                                        children: [
+                                                            7,
+                                                            14,
+                                                            22,
+                                                            33,
+                                                            39,
+                                                            45
+                                                        ].map((n)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "w-12 h-12 flex items-center justify-center bg-black text-white rounded-full font-black text-sm shadow-xl hover:scale-125 transition-transform cursor-pointer",
+                                                                children: n
+                                                            }, n, false, {
+                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                lineNumber: 240,
+                                                                columnNumber: 45
+                                                            }, this))
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                        lineNumber: 238,
+                                                        columnNumber: 37
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                        className: "text-[10px] text-indigo-400 font-black italic",
+                                                        children: '"오늘 당신의 발걸음이 행운의 시작점이 될 것입니다."'
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                        lineNumber: 243,
+                                                        columnNumber: 37
+                                                    }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                lineNumber: 303,
-                                                columnNumber: 123
-                                            }, this),
+                                                lineNumber: 232,
+                                                columnNumber: 33
+                                            }, this)
+                                        }, void 0, false, {
+                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                            lineNumber: 221,
+                                            columnNumber: 25
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                        lineNumber: 220,
+                                        columnNumber: 21
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "bg-slate-900 rounded-[64px] p-12 text-white relative overflow-hidden shadow-2xl",
+                                        children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "grid grid-cols-3 gap-2",
+                                                className: "absolute top-0 right-0 p-10 opacity-10",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__["Sparkles"], {
+                                                    className: "w-48 h-48 text-yellow-400"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                    lineNumber: 251,
+                                                    columnNumber: 81
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                lineNumber: 251,
+                                                columnNumber: 25
+                                            }, this),
+                                            !analysis ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "text-center relative z-10 space-y-10 py-6",
                                                 children: [
-                                                    {
-                                                        type: '2000',
-                                                        l: 2
-                                                    },
-                                                    {
-                                                        type: '1000',
-                                                        l: 5
-                                                    },
-                                                    {
-                                                        type: '500',
-                                                        l: 1
-                                                    }
-                                                ].map((sp)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "bg-white/10 rounded-2xl p-3 text-center",
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                        className: "text-4xl font-black tracking-tighter",
+                                                        children: [
+                                                            "오늘의 기운을",
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
+                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                lineNumber: 254,
+                                                                columnNumber: 93
+                                                            }, this),
+                                                            "점지하시겠습니까?"
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                        lineNumber: 254,
+                                                        columnNumber: 33
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                        onClick: handleAnalyze,
+                                                        disabled: isAnalyzing,
+                                                        className: "w-full bg-yellow-400 text-black font-black py-7 rounded-[36px] shadow-[0_20px_40px_-10px_rgba(250,204,21,0.4)] active:scale-95 transition-all text-xl uppercase tracking-tighter",
+                                                        children: "기운 확인하기"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                        lineNumber: 255,
+                                                        columnNumber: 33
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                lineNumber: 253,
+                                                columnNumber: 29
+                                            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "space-y-12 relative z-10 animate-in zoom-in duration-700",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                className: "text-[10px] font-black opacity-70 mb-1",
-                                                                children: sp.type
+                                                                className: "text-indigo-300 text-[11px] font-black uppercase tracking-[0.5em] mb-4",
+                                                                children: "Oracle Score"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                lineNumber: 303,
-                                                                columnNumber: 415
+                                                                lineNumber: 259,
+                                                                columnNumber: 38
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                className: "text-xl font-black",
+                                                                className: "text-9xl font-black text-yellow-400 tracking-tighter leading-none",
                                                                 children: [
-                                                                    sp.l,
-                                                                    "매"
+                                                                    analysis.score,
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                        className: "text-4xl text-white/20 ml-2",
+                                                                        children: "/100"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                        lineNumber: 259,
+                                                                        columnNumber: 237
+                                                                    }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                lineNumber: 303,
-                                                                columnNumber: 482
+                                                                lineNumber: 259,
+                                                                columnNumber: 140
                                                             }, this)
                                                         ]
-                                                    }, sp.type, true, {
+                                                    }, void 0, true, {
                                                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                        lineNumber: 303,
-                                                        columnNumber: 344
-                                                    }, this))
-                                            }, void 0, false, {
+                                                        lineNumber: 259,
+                                                        columnNumber: 33
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                        className: "text-3xl font-black leading-[1.2] text-white",
+                                                        children: [
+                                                            '"',
+                                                            analysis.insights,
+                                                            '"'
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                        lineNumber: 260,
+                                                        columnNumber: 33
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "grid grid-cols-2 gap-4",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                className: "bg-white text-black font-black py-6 rounded-[32px] text-xs flex flex-col items-center justify-center shadow-2xl active:scale-90 transition-all",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$message$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MessageCircle$3e$__["MessageCircle"], {
+                                                                        className: "w-6 h-6 mb-2"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                        lineNumber: 261,
+                                                                        columnNumber: 236
+                                                                    }, this),
+                                                                    " 행운 전달"
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                lineNumber: 261,
+                                                                columnNumber: 73
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                className: "bg-white/10 text-white font-black py-6 rounded-[32px] text-xs flex flex-col items-center justify-center border border-white/20 active:scale-90 transition-all",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$download$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Download$3e$__["Download"], {
+                                                                        className: "w-6 h-6 mb-2"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                        lineNumber: 261,
+                                                                        columnNumber: 471
+                                                                    }, this),
+                                                                    " 기운 저장"
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                                lineNumber: 261,
+                                                                columnNumber: 293
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
+                                                        lineNumber: 261,
+                                                        columnNumber: 33
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
                                                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                lineNumber: 303,
-                                                columnNumber: 230
+                                                lineNumber: 258,
+                                                columnNumber: 29
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                        lineNumber: 303,
-                                        columnNumber: 21
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "grid grid-cols-1 gap-3",
-                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                            onClick: ()=>openNaverMap(selectedStore),
-                                            className: "flex items-center justify-between p-5 bg-slate-900 text-white rounded-[32px] hover:scale-[1.02] transition-all",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "flex items-center font-black text-sm",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Map$3e$__["Map"], {
-                                                            className: "w-5 h-5 mr-3 text-green-400"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 304,
-                                                            columnNumber: 290
-                                                        }, this),
-                                                        " 네이버 길찾기"
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 304,
-                                                    columnNumber: 236
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$external$2d$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ExternalLink$3e$__["ExternalLink"], {
-                                                    className: "w-4 h-4 opacity-30"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 304,
-                                                    columnNumber: 355
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                            lineNumber: 304,
-                                            columnNumber: 61
-                                        }, this)
-                                    }, void 0, false, {
-                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                        lineNumber: 304,
-                                        columnNumber: 21
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "bg-gradient-to-br from-indigo-600 to-violet-700 rounded-[40px] p-8 text-white relative overflow-hidden shadow-2xl",
-                                        children: !analysis ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "text-center relative z-10",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__["Sparkles"], {
-                                                    className: "w-10 h-10 mx-auto mb-4 text-yellow-300 animate-bounce"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 307,
-                                                    columnNumber: 72
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                    className: "font-black text-xl mb-2 tracking-tighter",
-                                                    children: "AI 기운 분석"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 307,
-                                                    columnNumber: 150
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-indigo-100 text-xs mb-8 opacity-70 leading-relaxed font-medium",
-                                                    children: [
-                                                        "공공데이터 통합 분석 기반",
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
-                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 307,
-                                                            columnNumber: 317
-                                                        }, this),
-                                                        "이곳의 당첨 기운을 확인하세요."
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 307,
-                                                    columnNumber: 220
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                    onClick: handleAnalyze,
-                                                    disabled: isAnalyzing,
-                                                    className: "w-full bg-white text-indigo-600 font-black py-4 rounded-2xl shadow-xl active:scale-95 transition-all",
-                                                    children: isAnalyzing ? "분석 중..." : "무료 분석 시작"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 307,
-                                                    columnNumber: 343
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                            lineNumber: 307,
-                                            columnNumber: 29
-                                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "space-y-6 relative z-10 animate-in zoom-in duration-500",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                            className: "text-indigo-200 text-[10px] font-black uppercase tracking-widest mb-1",
-                                                            children: "Luck Score"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 310,
-                                                            columnNumber: 38
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                            className: "text-6xl font-black text-yellow-300",
-                                                            children: [
-                                                                analysis.score,
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                    className: "text-xl text-white/30 ml-1",
-                                                                    children: "/100"
-                                                                }, void 0, false, {
-                                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                    lineNumber: 310,
-                                                                    columnNumber: 204
-                                                                }, this)
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 310,
-                                                            columnNumber: 137
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 310,
-                                                    columnNumber: 33
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-sm font-bold leading-relaxed text-indigo-50 italic",
-                                                    children: [
-                                                        '"',
-                                                        analysis.insights,
-                                                        '"'
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 311,
-                                                    columnNumber: 33
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "bg-white/10 rounded-[32px] p-5 backdrop-blur-md border border-white/10",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                            className: "text-[10px] text-indigo-200 font-black mb-4 uppercase text-center tracking-widest flex items-center justify-center",
-                                                            children: [
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__["Sparkles"], {
-                                                                    className: "w-3 h-3 mr-2"
-                                                                }, void 0, false, {
-                                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                    lineNumber: 313,
-                                                                    columnNumber: 167
-                                                                }, this),
-                                                                " AI Lucky Numbers"
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 313,
-                                                            columnNumber: 37
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "flex justify-between mb-6",
-                                                            children: analysis.luckyNumber.map((n)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                    className: "w-8 h-8 flex items-center justify-center bg-white text-indigo-900 rounded-full font-black text-xs shadow-lg transform hover:rotate-12 transition-transform",
-                                                                    children: n
-                                                                }, n, false, {
-                                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                    lineNumber: 314,
-                                                                    columnNumber: 112
-                                                                }, this))
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 314,
-                                                            columnNumber: 37
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "bg-indigo-500/20 rounded-2xl p-3 text-center",
-                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                className: "text-[10px] font-bold text-indigo-100",
-                                                                children: [
-                                                                    "이 번호는 ",
-                                                                    selectedStore.name,
-                                                                    "의",
-                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
-                                                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                        lineNumber: 315,
-                                                                        columnNumber: 179
-                                                                    }, this),
-                                                                    "기운을 받아 생성되었습니다."
-                                                                ]
-                                                            }, void 0, true, {
-                                                                fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                lineNumber: 315,
-                                                                columnNumber: 99
-                                                            }, this)
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 315,
-                                                            columnNumber: 37
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 312,
-                                                    columnNumber: 33
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "grid grid-cols-2 gap-3 mt-6",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                            onClick: ()=>alert('카톡 행운 카드 생성'),
-                                                            className: "bg-yellow-400 text-yellow-900 font-black py-4 rounded-2xl text-[10px] shadow-xl flex flex-col items-center justify-center active:scale-95 transition-all",
-                                                            children: [
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$message$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MessageCircle$3e$__["MessageCircle"], {
-                                                                    className: "w-5 h-5 mb-1"
-                                                                }, void 0, false, {
-                                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                    lineNumber: 318,
-                                                                    columnNumber: 247
-                                                                }, this),
-                                                                " 카톡 행운 전달"
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 318,
-                                                            columnNumber: 37
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                            onClick: ()=>alert('행운 이미지 저장'),
-                                                            className: "bg-white/10 text-white font-black py-4 rounded-2xl text-[10px] border border-white/20 flex flex-col items-center justify-center active:scale-95 transition-all",
-                                                            children: [
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$download$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Download$3e$__["Download"], {
-                                                                    className: "w-5 h-5 mb-1"
-                                                                }, void 0, false, {
-                                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                                    lineNumber: 319,
-                                                                    columnNumber: 251
-                                                                }, this),
-                                                                " 행운카드 저장"
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                            lineNumber: 319,
-                                                            columnNumber: 37
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                                    lineNumber: 317,
-                                                    columnNumber: 33
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                            lineNumber: 309,
-                                            columnNumber: 29
-                                        }, this)
-                                    }, void 0, false, {
-                                        fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                        lineNumber: 305,
+                                        lineNumber: 250,
                                         columnNumber: 21
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                                lineNumber: 301,
+                                lineNumber: 206,
                                 columnNumber: 17
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                        lineNumber: 295,
+                        lineNumber: 204,
                         columnNumber: 13
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                lineNumber: 143,
+                lineNumber: 145,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "absolute bottom-6 right-6 z-50 flex flex-col space-y-3",
+                className: "absolute bottom-12 right-12 z-50 flex flex-col space-y-6",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         onClick: ()=>setActiveTab('HELP'),
-                        className: "bg-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-indigo-600 border border-slate-100",
+                        className: "bg-white w-20 h-20 rounded-[36px] shadow-[0_24px_48px_-12px_rgba(0,0,0,0.2)] flex items-center justify-center text-indigo-600 border border-slate-50 transition-all hover:scale-110 active:scale-90",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$info$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Info$3e$__["Info"], {
-                            className: "w-7 h-7"
+                            className: "w-10 h-10"
                         }, void 0, false, {
                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                            lineNumber: 330,
-                            columnNumber: 184
+                            lineNumber: 271,
+                            columnNumber: 264
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                        lineNumber: 330,
+                        lineNumber: 271,
                         columnNumber: 11
                     }, this),
                     activeTab === 'MAP' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         onClick: ()=>setIsSidebarOpen(!isSidebarOpen),
-                        className: "md:hidden bg-indigo-600 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-white",
+                        className: "md:hidden bg-black w-20 h-20 rounded-[36px] shadow-[0_24px_48px_-12px_rgba(0,0,0,0.2)] flex items-center justify-center text-white transition-all hover:scale-110 active:scale-90",
                         children: isSidebarOpen ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                            className: "w-7 h-7"
+                            className: "w-10 h-10"
                         }, void 0, false, {
                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                            lineNumber: 332,
-                            columnNumber: 203
+                            lineNumber: 273,
+                            columnNumber: 279
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$search$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Search$3e$__["Search"], {
-                            className: "w-7 h-7"
+                            className: "w-10 h-10"
                         }, void 0, false, {
                             fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                            lineNumber: 332,
-                            columnNumber: 231
+                            lineNumber: 273,
+                            columnNumber: 309
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                        lineNumber: 332,
+                        lineNumber: 273,
                         columnNumber: 15
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-                lineNumber: 329,
+                lineNumber: 270,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/lotto-map-korea/app/components/MapInterface.tsx",
-        lineNumber: 110,
+        lineNumber: 120,
         columnNumber: 5
     }, this);
 }
-_s(MapInterface, "mDshrS9cfOQW8eY+9TxnFcSEu7Y=");
+_s(MapInterface, "szSf6uiBIg68d9PpC7kn9QQHn2o=");
 _c = MapInterface;
 var _c;
 __turbopack_context__.k.register(_c, "MapInterface");

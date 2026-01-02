@@ -1,21 +1,18 @@
 import { LotteryStore, LuckAnalysis } from "./types";
 
-// [심리전] 콜드 리딩(Cold Reading) 템플릿: 누구나 자기 얘기처럼 느끼게 하는 문구
-const FORTUNE_TEMPLATES = [
-  { text: "동쪽에서 귀인이 다가옵니다. 이번 주는 직감을 믿고 과감하게 행동하세요.", keywords: "귀인,직감,과감" },
-  { text: "정체된 기운이 풀리고 있습니다. 소액으로 꾸준히 도전하면 큰 흐름을 탑니다.", keywords: "해소,흐름,꾸준함" },
-  { text: "뜻밖의 횡재수가 보입니다. 평소와 다른 번호를 선택해보는 것이 좋습니다.", keywords: "횡재,변화,기회" },
-  { text: "재물운이 상승 곡선을 그립니다. 잃을 것이 없는 가벼운 마음이 행운을 부릅니다.", keywords: "상승,가벼움,행운" },
-  { text: "강력한 화(火)의 기운이 느껴집니다. 숫자 9나 1이 들어간 번호를 주목하세요.", keywords: "열정,숫자,집중" }
+// [Market Eater] 테크-샤머니즘 서사 템플릿
+const SHAMAN_NARRATIVES = [
+  { text: "청룡의 기운이 승천하는 혈자리입니다. 동쪽에서 불어오는 재물운이 이 매장에 응축되어 있습니다.", keywords: "청룡,승천,혈자리" },
+  { text: "조상의 음덕이 머무는 명당입니다. 오늘 당신의 관상과 이 매장의 지기가 공명하여 잭팟의 전조를 보입니다.", keywords: "조상,공명,전조" },
+  { text: "화(火)의 에너지가 폭발적으로 타오르는 곳입니다. 붉은색 아이템을 소지하고 방문하면 당첨 확률이 극대화됩니다.", keywords: "화기,폭발,레드" },
+  { text: "정체된 액운을 씻어내고 황금의 흐름을 불러오는 수(水)의 명당입니다. 오후 4시에서 6시 사이가 골든타임입니다.", keywords: "황금흐름,세척,골든타임" },
+  { text: "땅의 기운이 겹치는 '쌍룡'의 형국입니다. 한 번의 선택이 인생의 거대한 변곡점을 만들 강력한 기류가 감지됩니다.", keywords: "쌍룡,변곡점,강력기류" }
 ];
 
 export const analyzeLuckLocal = (store: LotteryStore): LuckAnalysis => {
-  // [Trap] 날짜 + 가게 ID = 고정된 시드값.
-  // 사용자가 "새로고침"을 해도 같은 결과가 나와야 "진짜 분석"이라고 착각한다.
-  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-  const seedString = `${store.id}-${today}-MONOPOLY`; 
+  const today = new Date().toISOString().slice(0, 10);
+  const seedString = `${store.id}-${today}-MARKET-EATER`; 
   
-  // 간단한 해시 생성 (LCG 변형)
   let hash = 0;
   for (let i = 0; i < seedString.length; i++) {
     hash = ((hash << 5) - hash) + seedString.charCodeAt(i);
@@ -27,26 +24,23 @@ export const analyzeLuckLocal = (store: LotteryStore): LuckAnalysis => {
     return Math.abs(hash) / 4294967296;
   };
 
-  // 점수 후킹: 절대 80점 밑으로 주지 마라. 고객은 기분 나쁘면 앱을 지운다.
-  const score = 80 + Math.floor(pseudoRandom() * 20); 
+  // 점수 하한선을 85점으로 상향 (더 강한 확신 부여)
+  const score = 85 + Math.floor(pseudoRandom() * 15); 
 
-  // 번호 생성: 1~45 중복 제거
   const numbers = new Set<number>();
-  // 첫 번호는 가게 이름 길이로 생성하여 '로컬 연관성' 부여 (기만)
-  numbers.add((store.name.length * 7) % 45 + 1);
+  numbers.add((store.name.length * 13) % 45 + 1);
   
   while(numbers.size < 6) {
     numbers.add(Math.floor(pseudoRandom() * 45) + 1);
   }
 
-  // 멘트 선정
-  const templateIdx = Math.floor(pseudoRandom() * FORTUNE_TEMPLATES.length);
-  const selected = FORTUNE_TEMPLATES[templateIdx];
+  const templateIdx = Math.floor(pseudoRandom() * SHAMAN_NARRATIVES.length);
+  const selected = SHAMAN_NARRATIVES[templateIdx];
 
   return {
     score,
-    recommendation: `행운 키워드: ${selected.keywords}`,
+    recommendation: `영험한 키워드: ${selected.keywords}`,
     luckyNumber: Array.from(numbers).sort((a, b) => a - b),
-    insights: `${store.name}의 지기(地氣) 분석: ${selected.text}`
+    insights: `${store.name}의 영험한 기운: ${selected.text}`
   };
 };

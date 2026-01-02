@@ -9,13 +9,17 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "chart.js": "^4.5.1",
     "cheerio": "^1.1.2",
+    "csv-stringify": "^6.6.0",
     "lucide-react": "^0.562.0",
     "next": "16.1.1",
     "react": "19.2.3",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "19.2.3"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.16",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/node-fetch": "^2.6.13",
@@ -28,6 +32,7 @@
     "iconv-lite": "^0.7.1",
     "node-fetch": "^3.3.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.0.16"
   }
 }

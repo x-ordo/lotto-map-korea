@@ -1,0 +1,29 @@
+{
+  "speetto": {
+    "500": {
+      "series": "45회",
+      "remaining1st": 1
+    },
+    "1000": {
+      "series": "82회",
+      "remaining1st": 5
+    },
+    "2000": {
+      "series": "54회",
+      "remaining1st": 2
+    }
+  },
+  "lotto": {
+    "round": 1146,
+    "numbers": [
+      7,
+      12,
+      24,
+      33,
+      38,
+      45
+    ],
+    "bonus": 1,
+    "updatedAt": "2026-01-02T18:12:28.322Z"
+  }
+}

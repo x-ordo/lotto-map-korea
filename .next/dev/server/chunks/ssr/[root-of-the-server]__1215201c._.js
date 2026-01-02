@@ -61,11 +61,56 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$app
 ;
 ;
 function Home() {
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$app$2f$components$2f$MapLoader$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
-        fileName: "[project]/lotto-map-korea/app/page.tsx",
-        lineNumber: 4,
-        columnNumber: 10
-    }, this);
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'Service',
+        'name': 'LottoShrine AI Analysis',
+        'description': '전국 로또 1등 명당 실시간 분석 및 지도 서비스',
+        'provider': {
+            '@type': 'Organization',
+            'name': 'LottoShrine Team'
+        },
+        'areaServed': 'KR',
+        'hasOfferCatalog': {
+            '@type': 'OfferCatalog',
+            'name': 'Lotto Services',
+            'itemListElement': [
+                {
+                    '@type': 'Offer',
+                    'itemOffered': {
+                        '@type': 'Service',
+                        'name': 'AI Luck Analysis'
+                    }
+                },
+                {
+                    '@type': 'Offer',
+                    'itemOffered': {
+                        '@type': 'Service',
+                        'name': 'Real-time Store Map'
+                    }
+                }
+            ]
+        }
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Fragment"], {
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("script", {
+                type: "application/ld+json",
+                dangerouslySetInnerHTML: {
+                    __html: JSON.stringify(jsonLd)
+                }
+            }, void 0, false, {
+                fileName: "[project]/lotto-map-korea/app/page.tsx",
+                lineNumber: 26,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$lotto$2d$map$2d$korea$2f$app$2f$components$2f$MapLoader$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+                fileName: "[project]/lotto-map-korea/app/page.tsx",
+                lineNumber: 30,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true);
 }
 }),
 "[project]/lotto-map-korea/app/page.tsx [app-rsc] (ecmascript, Next.js Server Component)", ((__turbopack_context__) => {

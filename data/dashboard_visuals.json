@@ -1,0 +1,226 @@
+{
+  "generatedAt": "2026-01-03T03:12:28.899022",
+  "frequency": [
+    {
+      "number": 1,
+      "count": 140
+    },
+    {
+      "number": 24,
+      "count": 140
+    },
+    {
+      "number": 26,
+      "count": 140
+    },
+    {
+      "number": 27,
+      "count": 140
+    },
+    {
+      "number": 28,
+      "count": 140
+    },
+    {
+      "number": 29,
+      "count": 140
+    },
+    {
+      "number": 30,
+      "count": 140
+    },
+    {
+      "number": 31,
+      "count": 140
+    },
+    {
+      "number": 32,
+      "count": 140
+    },
+    {
+      "number": 33,
+      "count": 140
+    },
+    {
+      "number": 34,
+      "count": 140
+    },
+    {
+      "number": 35,
+      "count": 140
+    },
+    {
+      "number": 36,
+      "count": 140
+    },
+    {
+      "number": 37,
+      "count": 140
+    },
+    {
+      "number": 38,
+      "count": 140
+    },
+    {
+      "number": 39,
+      "count": 140
+    },
+    {
+      "number": 40,
+      "count": 140
+    },
+    {
+      "number": 41,
+      "count": 140
+    },
+    {
+      "number": 42,
+      "count": 140
+    },
+    {
+      "number": 43,
+      "count": 140
+    },
+    {
+      "number": 44,
+      "count": 140
+    },
+    {
+      "number": 25,
+      "count": 140
+    },
+    {
+      "number": 23,
+      "count": 140
+    },
+    {
+      "number": 2,
+      "count": 140
+    },
+    {
+      "number": 22,
+      "count": 140
+    },
+    {
+      "number": 3,
+      "count": 140
+    },
+    {
+      "number": 4,
+      "count": 140
+    },
+    {
+      "number": 5,
+      "count": 140
+    },
+    {
+      "number": 6,
+      "count": 140
+    },
+    {
+      "number": 7,
+      "count": 140
+    },
+    {
+      "number": 8,
+      "count": 140
+    },
+    {
+      "number": 9,
+      "count": 140
+    },
+    {
+      "number": 10,
+      "count": 140
+    },
+    {
+      "number": 11,
+      "count": 140
+    },
+    {
+      "number": 12,
+      "count": 140
+    },
+    {
+      "number": 13,
+      "count": 140
+    },
+    {
+      "number": 14,
+      "count": 140
+    },
+    {
+      "number": 15,
+      "count": 140
+    },
+    {
+      "number": 16,
+      "count": 140
+    },
+    {
+      "number": 17,
+      "count": 140
+    },
+    {
+      "number": 18,
+      "count": 140
+    },
+    {
+      "number": 19,
+      "count": 140
+    },
+    {
+      "number": 20,
+      "count": 140
+    },
+    {
+      "number": 21,
+      "count": 140
+    },
+    {
+      "number": 45,
+      "count": 140
+    }
+  ],
+  "ratios": {
+    "labels": [
+      "홀",
+      "짝",
+      "저(1-22)",
+      "고(23-45)"
+    ],
+    "values": [
+      48.5,
+      51.5,
+      52.1,
+      47.9
+    ]
+  },
+  "winningTrend": [
+    {
+      "round": 1145,
+      "amount": 30.5
+    },
+    {
+      "round": 1144,
+      "amount": 18.2
+    },
+    {
+      "round": 1143,
+      "amount": 25.1
+    },
+    {
+      "round": 1142,
+      "amount": 15.8
+    },
+    {
+      "round": 1141,
+      "amount": 22.4
+    }
+  ],
+  "summary": {
+    "totalAnalyzed": 1205,
+    "hotNumber": 1,
+    "coldNumber": 1
+  }
+}

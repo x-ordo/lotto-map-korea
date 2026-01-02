@@ -2,19 +2,24 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: '로또명당 v2.5 - AI 실시간 명당 분석 및 1등 당첨 통계',
-  description: '기획재정부 공공데이터 기반 전국 로또 1등 명당 지도. AI 기운 분석, 스피또 잔여 수량, 당첨 번호 통계를 실시간으로 확인하세요.',
-  keywords: ['로또 명당', '로또 1등', '로또 당첨번호 조회', '스피또 잔여수량', '로또 분석', '이번주 로또 예상번호'],
+  metadataBase: new URL('https://lotto-shrine.pages.dev'), 
+  title: {
+    default: 'LottoShrine - AI 로또 명당 성지순례 및 1등 당첨 분석',
+    template: '%s | LottoShrine'
+  },
+  description: '기획재정부 공공데이터와 AI가 분석한 전국 로또 1등 명당 지도. 내 주변 스피또 잔여 수량 확인 및 AI 꿈해몽으로 이번 주 행운의 번호를 점지받으세요.',
+  keywords: ['로또 명당', '로또 1등 지역', '스피또 1등 잔여수량', '로또 당첨번호 조회', 'AI 로또 분석', '꿈해몽 번호', '성지순례'],
   openGraph: {
-    title: '💰 이번 주 1등 기운이 흐르는 명당은 어디?',
-    description: '지금 내 주변 1등 배출 판매점과 AI가 분석한 행운 번호를 확인하세요.',
-    url: 'https://lotto-map-korea.vercel.app',
-    siteName: '로또명당',
+    title: '💰 지금 내 주변에 1등 기운이 흐르는 성지는 어디?',
+    description: '공공데이터로 증명된 실시간 로또 명당 지도. 방문 인증 시 AI 전용 번호 무료 증정.',
+    url: 'https://lotto-shrine.pages.dev',
+    siteName: 'LottoShrine',
     images: [
       {
-        url: '/og-image.png',
+        url: '/og-shrine.png',
         width: 1200,
         height: 630,
+        alt: 'LottoShrine AI Analysis'
       },
     ],
     locale: 'ko_KR',
@@ -22,8 +27,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '로또명당 - 실시간 데이터 분석',
-    description: '공공데이터로 증명된 1등 명당을 지도로 확인하세요.',
+    title: 'LottoShrine - 초지역적 운명론 가이드',
+    description: '당신의 위치와 기운에 맞는 명당을 추천합니다.',
   },
 };
 
@@ -37,7 +42,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-         <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d924cfb41cb41e34c93dab696d6a779b&libraries=services,clusterer"></script>
+         <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d924cfb41cb41e34c93dab696d6a779b&libraries=services,clusterer&autoload=false"></script>
       </head>
       <body className="bg-slate-50 overflow-hidden antialiased">{children}</body>
     </html>
