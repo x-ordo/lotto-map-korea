@@ -1,24 +1,57 @@
+# Dependency directories
+node_modules/
+/jspm_packages/
+
+# Next.js build output
+.next/
+/out/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
 # Logs
-logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+docs/scraping_log.txt
 
-node_modules
-dist
-dist-ssr
-*.local
+# Testing
+/coverage/
+/.vitest/
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# Production / Build assets
+dist/
+dist-scripts/
+dist-types/
+
+# Data & Scraping Assets (Large files or generated content)
+data/scraped_csv/
+data/lotto_library_final/
+data/master_data.json
+data/expert_report.json
+data/dashboard_visuals.json
+data/live_status.json
+data/geoCache.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Vercel / Cloudflare
+.vercel
+.cloudflare
