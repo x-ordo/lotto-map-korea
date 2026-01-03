@@ -20,7 +20,24 @@ export interface DreamInterpretation {
   meaning: string;
 }
 
-export type TabType = 'MAP' | 'RANK' | 'STATS' | 'REPORT' | 'DREAM' | 'QR' | 'HELP';
+export type TabType = 'MAP' | 'RANK' | 'STATS' | 'DREAM' | 'HELP' | 'COMMUNITY' | 'PRO';
+
+export interface CommunityPost {
+    id: string;
+    author: string;
+    storeName: string;
+    content: string;
+    wins?: string; // 예: "5등 당첨", "1등 전조"
+    imageUrl?: string;
+    likes: number;
+    createdAt: string;
+}
+
+export interface UserSubscription {
+    isPro: boolean;
+    tier: 'FREE' | 'PRO' | 'ELITE';
+    expiresAt?: string;
+}
 
 export interface LotteryStore {
   id: string;
