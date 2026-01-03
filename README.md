@@ -1,44 +1,43 @@
-# 💰 Lotto Map Korea (로또명당 v2.6)
+# 💰 LottoShrine PRO (v2.6)
 
-> **공공데이터와 AI가 결합된 지능형 로또 명당 대시보드**  
-> 대한민국 No.1 로또 분석 플랫폼을 지향합니다.
-
----
-
-## 🎯 비즈니스 포지셔닝 및 전략 (Strategic Positioning)
-
-본 프로젝트는 시장의 기존 강자들을 분석하여 그들의 한계를 극복하는 독보적 포지션을 점유합니다.
-
-### 1. 경쟁 업체 분석 (Competitor Analysis)
-- **로또리치 (Lottorich)**: 고가 프리미엄 전략, 강력한 당첨 인증 중심. (한계: 높은 유료 장벽)
-- **로또플레이 (Lottoplay)**: 방대한 통계 라이브러리 및 조합 필터링 중심. (한계: 난해한 UX)
-- **로또명당 (Legacy Apps)**: 단순 지도 검색 위주. (한계: 정적 데이터 및 인사이트 부족)
-
-### 2. 우리의 성공 방정식 (Our USP)
-- **Data Transparency**: 기획재정부 5대 공공데이터를 100% 투명하게 공개하여 신뢰도 확보.
-- **AI Intelligence**: 단순 당첨 횟수가 아닌 **'판매량 대비 당첨 효율(Luck Index)'** 모델 도입.
-- **Hyper-Local UX**: 네이버 지도 연동, 스피또 실시간 잔여량 등 방문 결정에 필요한 모든 유틸리티 제공.
-- **Viral Distribution**: AI 행운 카드 공유 시스템을 통해 마케팅 비용 없는 성장을 추구.
+> **"지도가 아니라, 당신의 운명을 점지하는 디지털 성황당"**  
+> 공공데이터의 투명성과 테크-샤머니즘이 결합된 대한민국 독보적 로또 플랫폼.
 
 ---
 
-## 🚀 주요 기능 (Key Features)
-- **지도(MAP)**: 전국 1등 명당 실시간 탐색 및 네이버 지도 길찾기 연동.
-- **순위(RANK)**: 전국 TOP 100 당첨 판매점 실시간 랭킹.
-- **꿈해몽(DREAM)**: AI 기반 20가지 길몽 키워드 분석 및 번호 추출.
-- **분석(REPORT)**: 공공데이터 기반 지역별/회차별 심층 분석 리포트.
-- **스피또(SPEETTO)**: 2000/1000/500 실시간 1등 잔여 수량 시각화.
+## 🎯 Strategic Positioning: Operation 'Market Eater'
+
+LottoShrine은 기존 유료 서비스(로또리치, 로또플레이)의 폐쇄적인 비즈니스 모델을 해체하고, **'무료 정보의 민주화'**와 **'초지역적 운명론(Hyper-Local Destiny)'**을 통해 시장을 점유합니다.
+
+### 1. 포식자의 성공 방정식
+- **Data-Driven Shamanism**: 기획재정부 공공데이터 25,000행을 분석하여 신화적 서사로 풀이하는 AI 엔진.
+- **Location-Locked Reward**: 특정 명당 반경 500m 이내 접근 시에만 공개되는 **'성지 전용 번호'** (GPS 인증 퀘스트).
+- **Social Proof Strategy**: 실시간 트래픽 시각화를 통해 사용자가 '당첨의 흐름' 속에 있음을 증명.
+
+### 2. 핵심 기능 (Key Assets)
+- **성지순례 (MAP)**: 전국 1등 명당 실시간 탐색 및 GPS 방문 인증 시스템.
+- **전략 대시보드 (STATS)**: Chart.js 기반의 고성능 BI 도구. 번호별 빈도 및 당첨금 트렌드 분석.
+- **꿈의 계시 (DREAM)**: 비정형 꿈 키워드를 정밀 번호로 치환하는 AI 오라클.
+- **로또 지식 백과 (HELP)**: 로또플레이 37개 라이브러리를 통합한 완벽 가이드.
 
 ---
 
-## 📊 데이터 인프라 (Data ETL)
-- **수집**: Node.js(Cheerio) 및 Playwright를 활용한 전문 사이트 크롤링.
-- **분석**: Python(Pandas/Matplotlib)을 통한 정밀 통계 및 시각화.
-- **최적화**: 지오코딩 캐싱 전략 및 병렬 배치를 통한 성능 극대화.
+## 🏗️ Tech Stack & Engineering
+- **Frontend**: Next.js 16 (Turbopack), Tailwind CSS, Lucide React.
+- **Analytics**: Python (Pandas, Matplotlib) Data Pipeline.
+- **Automation**: Master Crawler (Node.js, Cheerio, Playwright).
+- **Stability**: TDD (Vitest), Error Boundary, SEO (JSON-LD).
 
 ---
 
-## 🛠 향후 로드맵 (Roadmap)
-- [ ] PWA 기반 실시간 푸시 알림 (토요일 20:45)
-- [ ] 실제 사용자 당첨 인증 게시판 (Social Proof)
-- [ ] 지역별 SEO 전용 페이지 구축 (Distribution)
+## 🛠️ Installation & Build
+```bash
+# 의존성 설치
+npm install --legacy-peer-deps
+
+# 배포 파이프라인 가동 (테스트 + 빌드)
+./scripts/deploy.sh
+```
+
+---
+*본 프로젝트는 유료 로또 분석 시장의 거품을 제거하고 공공데이터를 통해 사용자에게 진정한 가치를 전달하는 것을 목표로 합니다.*

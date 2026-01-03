@@ -43,7 +43,11 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-         <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d924cfb41cb41e34c93dab696d6a779b&libraries=services,clusterer&autoload=false"></script>
+         <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.kakao.com *.daumcdn.net; img-src 'self' data: *.kakao.com *.daumcdn.net *.lottoplay.co.kr; style-src 'self' 'unsafe-inline'; connect-src 'self' *.kakao.com *.daumcdn.net;" />
+         <script 
+           type="text/javascript" 
+           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAPS_APP_KEY}&libraries=services,clusterer&autoload=false`}
+         ></script>
       </head>
       <body className="bg-slate-50 overflow-hidden antialiased">
         <ErrorBoundary>
