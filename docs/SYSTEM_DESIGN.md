@@ -1,25 +1,18 @@
-# 🏗️ LottoShrine System Architecture & Page Definitions
+# 🏗️ LottoShrine System Architecture v2.7
 
-본 문서는 LottoShrine PRO의 프론트엔드 아키텍처와 데이터 흐름을 정의합니다.
+## 1. 프론트엔드 계층 구조
+- **Orchestrator**: `MapInterface.tsx` (탭 상태 및 데이터 허브)
+- **Tab Components**: 
+  - `CommunityWall.tsx`: 토스 스타일 소셜 피드.
+  - `InsightsDashboard.tsx`: Vercel 스타일 통계 대시보드.
+  - `SacredPanel`: GPS 인증 및 AI 분석 상세 패널.
 
-## 1. Core Principles
-- **State Driven**: 모든 UI 변화는 `activeTab`과 `selectedStore` 상태에 의해 결정론적으로 렌더링됩니다.
-- **Atomic Components**: 각 탭의 비즈니스 로직은 독립된 섹션으로 분리되어 유지보수성을 극대화합니다.
-- **Unidirectional Data Flow**: 데이터는 상위 `MapInterface`에서 하위 컴포넌트로 Props를 통해 단방향으로 흐릅니다.
+## 2. 백엔드 엔진 (Data Access Layer)
+- **DAO**: `lib/db.ts` - 파일 시스템 기반의 추상화된 DB 인터페이스.
+- **API Routes**:
+  - `GET/POST /api/community`: 게시글 조회 및 저장.
+- **Dynamic Configuration**: `revalidate = 0` 및 `force-dynamic`을 통한 실시간 데이터 처리.
 
-## 2. Page Transitions (Events)
-1. **Pilgrimage (성지순례)**:
-   - 사용자가 검색창에 지역 입력 -> `searchTerm` 업데이트 -> `processedStores` 필터링 -> 지도 마커 동적 갱신.
-2. **Destiny Unlock (기운 해제)**:
-   - `selectedStore.distance` < 500m 조건 충족 -> `Unlock` 아이콘 활성화 -> 행운 번호 렌더링.
-3. **Oracle Analysis (AI 점사)**:
-   - 분석 버튼 클릭 -> `luckEngine.ts` 호출 -> `SHAMAN_NARRATIVES` 매핑 -> 상세 패널에 결과 게시.
-
-## 3. Data Schema
-- **LotteryStore**: id, name, address, winCount1st, lat, lng, luckIndex.
-- **LuckAnalysis**: score, luckyNumber, insights, recommendation.
-- **DreamInterpretation**: keyword, meaning, numbers[].
-
----
-**Last Updated**: 2026.01.03
-**Maintainer**: LottoShrine Engineering Team
+## 3. 보안 인프라
+- **CSP**: 엄격한 콘텐츠 보안 정책으로 외부 스크립트 통제.
+- **Env Separation**: 모든 API Key의 환경 변수 관리.
