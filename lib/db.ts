@@ -1,13 +1,34 @@
 import fs from 'fs/promises';
 import { existsSync, mkdirSync } from 'fs';
 import path from 'path';
-import { CommunityPost } from './types';
+import { CommunityPost, SavedLotto } from './types';
 
 // 절대 경로를 사용하여 경로 오인 방지
 const DATA_DIR = path.resolve(process.cwd(), 'data');
 const DB_PATH = path.resolve(DATA_DIR, 'live_community.json');
+const LOTTO_DB_PATH = path.resolve(DATA_DIR, 'saved_lotto.json');
 
 export const db = {
+    lotto: {
+        async list(): Promise<SavedLotto[]> {
+            if (!existsSync(LOTTO_DB_PATH)) return [];
+            const data = await fs.readFile(LOTTO_DB_PATH, 'utf8');
+            return JSON.parse(data || '[]');
+        },
+        async save(numbers: number[], round: number, memo?: string): Promise<SavedLotto> {
+            const list = await this.list();
+            const newItem: SavedLotto = {
+                id: Math.random().toString(36).substr(2, 9),
+                numbers: numbers.sort((a,b) => a-b),
+                round,
+                createdAt: new Date().toISOString(),
+                ...(memo && { memo })
+            };
+            list.unshift(newItem);
+            await fs.writeFile(LOTTO_DB_PATH, JSON.stringify(list, null, 2), 'utf8');
+            return newItem;
+        }
+    },
     community: {
         async list(): Promise<CommunityPost[]> {
             // 1. 디렉토리 확인 및 생성

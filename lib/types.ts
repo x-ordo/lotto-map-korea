@@ -33,6 +33,14 @@ export interface CommunityPost {
     createdAt: string;
 }
 
+export interface SavedLotto {
+    id: string;
+    numbers: number[];
+    round: number;
+    createdAt: string;
+    memo?: string;
+}
+
 export interface UserSubscription {
     isPro: boolean;
     tier: 'FREE' | 'PRO' | 'ELITE';

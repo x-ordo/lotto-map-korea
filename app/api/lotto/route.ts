@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../../lib/db';
 import {
-  validateCommunityPostInput,
+  validateLottoInput,
   checkRateLimit,
   createSafeErrorResponse
 } from '../../../lib/validation';
@@ -19,7 +19,7 @@ export async function GET(request: Request) {
   try {
     // Rate limiting
     const clientIP = getClientIP(request);
-    const rateLimit = checkRateLimit(`community-get-${clientIP}`, 60, 60000);
+    const rateLimit = checkRateLimit(`lotto-get-${clientIP}`, 60, 60000);
 
     if (!rateLimit.allowed) {
       return NextResponse.json(
@@ -34,15 +34,15 @@ export async function GET(request: Request) {
       );
     }
 
-    const posts = await db.community.list();
-    return NextResponse.json(posts, {
+    const list = await db.lotto.list();
+    return NextResponse.json(list, {
       headers: {
         'X-RateLimit-Remaining': String(rateLimit.remaining),
       }
     });
-  } catch (error) {
-    // 에러 스택 노출 방지 (보안 취약점 수정)
-    console.error('Community GET error:', error);
+  } catch (e) {
+    // 에러 스택 노출 방지
+    console.error('Lotto GET error:', e);
     return NextResponse.json(
       createSafeErrorResponse('서버 오류가 발생했습니다.'),
       { status: 500 }
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
   try {
     // Rate limiting (POST는 더 엄격하게)
     const clientIP = getClientIP(request);
-    const rateLimit = checkRateLimit(`community-post-${clientIP}`, 10, 60000);
+    const rateLimit = checkRateLimit(`lotto-post-${clientIP}`, 20, 60000);
 
     if (!rateLimit.allowed) {
       return NextResponse.json(
@@ -80,8 +80,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // 입력 검증 (XSS 방지 포함)
-    const validation = validateCommunityPostInput(body);
+    // 입력 검증
+    const validation = validateLottoInput(body);
     if (!validation.success) {
       return NextResponse.json(
         createSafeErrorResponse(validation.error || '검증 실패'),
@@ -89,19 +89,17 @@ export async function POST(request: Request) {
       );
     }
 
-    const newPost = await db.community.create(validation.data!);
+    const { numbers, round, memo } = validation.data!;
+    const newItem = await db.lotto.save(numbers, round, memo);
 
-    return NextResponse.json(
-      { success: true, data: newPost },
-      {
-        status: 201,
-        headers: {
-          'X-RateLimit-Remaining': String(rateLimit.remaining),
-        }
+    return NextResponse.json(newItem, {
+      status: 201,
+      headers: {
+        'X-RateLimit-Remaining': String(rateLimit.remaining),
       }
-    );
-  } catch (error) {
-    console.error('Community POST error:', error);
+    });
+  } catch (e) {
+    console.error('Lotto POST error:', e);
     return NextResponse.json(
       createSafeErrorResponse('서버 오류가 발생했습니다.'),
       { status: 500 }
