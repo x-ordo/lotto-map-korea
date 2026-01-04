@@ -120,13 +120,14 @@ async function networkFirstThenCache(request) {
 async function staleWhileRevalidate(request) {
   const cached = await caches.match(request);
 
-  const fetchPromise = fetch(request).then((response) => {
+  const fetchPromise = fetch(request).then(async (response) => {
     if (response.ok) {
-      const cache = caches.open(DYNAMIC_CACHE_NAME);
-      cache.then((c) => c.put(request, response.clone()));
+      const responseClone = response.clone();
+      const cache = await caches.open(DYNAMIC_CACHE_NAME);
+      cache.put(request, responseClone);
     }
     return response;
-  });
+  }).catch(() => cached);
 
   return cached || fetchPromise;
 }
