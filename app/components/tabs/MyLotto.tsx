@@ -1,30 +1,37 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Trash2, Save } from 'lucide-react';
 import { SavedLotto } from '../../../lib/types';
+
+const STORAGE_KEY = 'lottoshrine_saved_lottos';
 
 export default function MyLotto() {
     const [numbers, setNumbers] = useState<number[]>([]);
     const [savedLottos, setSavedLottos] = useState<SavedLotto[]>([]);
 
+    // Load from localStorage on mount
     useEffect(() => {
-        let isMounted = true;
-        const fetchData = async () => {
-            const res = await fetch('/api/lotto');
-            if (res.ok && isMounted) {
-                setSavedLottos(await res.json());
+        try {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                setSavedLottos(JSON.parse(stored));
             }
-        };
-        fetchData();
-        return () => { isMounted = false; };
+        } catch (e) {
+            console.error('Failed to load saved lottos:', e);
+        }
     }, []);
 
-    const fetchSaved = async () => {
-        const res = await fetch('/api/lotto');
-        if (res.ok) setSavedLottos(await res.json());
-    };
+    // Save to localStorage helper
+    const saveToStorage = useCallback((lottos: SavedLotto[]) => {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(lottos));
+            setSavedLottos(lottos);
+        } catch (e) {
+            console.error('Failed to save lottos:', e);
+        }
+    }, []);
 
     const toggleNumber = (num: number) => {
         if (numbers.includes(num)) {
@@ -34,22 +41,29 @@ export default function MyLotto() {
         }
     };
 
-    const handleSave = async () => {
+    const handleSave = () => {
         if (numbers.length !== 6) return;
-        const res = await fetch('/api/lotto', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ numbers, round: 1205 })
-        });
-        if (res.ok) {
-            setNumbers([]);
-            fetchSaved();
-        }
+
+        const newLotto: SavedLotto = {
+            id: crypto.randomUUID(),
+            numbers,
+            round: 1205,
+            createdAt: new Date().toISOString(),
+        };
+
+        const updated = [newLotto, ...savedLottos];
+        saveToStorage(updated);
+        setNumbers([]);
+    };
+
+    const handleDelete = (id: string) => {
+        const updated = savedLottos.filter(l => l.id !== id);
+        saveToStorage(updated);
     };
 
     const generateQRValue = (nums: number[]) => {
         const formattedNums = nums.map(n => n.toString().padStart(2, '0')).join('');
-        return `http://m.dhlottery.co.kr/?v=081628303144q${formattedNums}1234567890`; 
+        return `http://m.dhlottery.co.kr/?v=081628303144q${formattedNums}1234567890`;
     };
 
     return (
@@ -64,7 +78,7 @@ export default function MyLotto() {
                     <h3 className="font-black text-[10px] uppercase text-zinc-400 tracking-widest">수동 번호 등록</h3>
                     <span className="text-[10px] font-black text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">{numbers.length} / 6</span>
                 </div>
-                
+
                 <div className="grid grid-cols-7 gap-1.5">
                     {Array.from({ length: 45 }, (_, i) => i + 1).map(n => (
                         <button
@@ -77,7 +91,7 @@ export default function MyLotto() {
                     ))}
                 </div>
 
-                <button 
+                <button
                     onClick={handleSave}
                     disabled={numbers.length !== 6}
                     className={`w-full py-4 rounded-2xl font-black text-sm flex items-center justify-center space-x-2 transition-all ${numbers.length === 6 ? 'bg-zinc-950 text-white shadow-xl shadow-zinc-200' : 'bg-zinc-100 text-zinc-300'}`}
@@ -89,24 +103,35 @@ export default function MyLotto() {
             <section className="space-y-4">
                 <h3 className="font-black text-[10px] uppercase text-zinc-400 tracking-widest ml-4">최근 저장 기록</h3>
                 <div className="grid grid-cols-1 gap-4">
-                    {savedLottos.map((lotto) => (
-                        <div key={lotto.id} className="bg-white border border-zinc-100 rounded-[24px] p-5 flex items-center justify-between group hover:border-indigo-500/30 transition-all">
-                            <div className="flex items-center space-x-4">
-                                <div className="p-2 bg-zinc-50 rounded-xl group-hover:bg-indigo-50 transition-colors">
-                                    <QRCodeSVG value={generateQRValue(lotto.numbers)} size={48} level="L" />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <div className="flex space-x-1">
-                                        {lotto.numbers.map(n => (
-                                            <span key={n} className="w-6 h-6 flex items-center justify-center bg-zinc-900 text-white rounded-md text-[9px] font-black">{n}</span>
-                                        ))}
-                                    </div>
-                                    <p className="text-[9px] text-zinc-400 font-bold uppercase">{new Date(lotto.createdAt).toLocaleDateString()} SECURED</p>
-                                </div>
-                            </div>
-                            <button className="p-2 text-zinc-200 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                    {savedLottos.length === 0 ? (
+                        <div className="bg-zinc-50 rounded-[24px] p-8 text-center">
+                            <p className="text-zinc-400 text-sm">저장된 번호가 없습니다</p>
                         </div>
-                    ))}
+                    ) : (
+                        savedLottos.map((lotto) => (
+                            <div key={lotto.id} className="bg-white border border-zinc-100 rounded-[24px] p-5 flex items-center justify-between group hover:border-indigo-500/30 transition-all">
+                                <div className="flex items-center space-x-4">
+                                    <div className="p-2 bg-zinc-50 rounded-xl group-hover:bg-indigo-50 transition-colors">
+                                        <QRCodeSVG value={generateQRValue(lotto.numbers)} size={48} level="L" />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <div className="flex space-x-1">
+                                            {lotto.numbers.map(n => (
+                                                <span key={n} className="w-6 h-6 flex items-center justify-center bg-zinc-900 text-white rounded-md text-[9px] font-black">{n}</span>
+                                            ))}
+                                        </div>
+                                        <p className="text-[9px] text-zinc-400 font-bold uppercase">{new Date(lotto.createdAt).toLocaleDateString()} SECURED</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => handleDelete(lotto.id)}
+                                    className="p-2 text-zinc-200 hover:text-red-500 transition-colors"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </button>
+                            </div>
+                        ))
+                    )}
                 </div>
             </section>
         </div>

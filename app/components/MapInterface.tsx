@@ -40,8 +40,13 @@ export default function MapInterface() {
         null, { enableHighAccuracy: true }
       );
     }
-    // 커뮤니티 포스트 로드
-    fetch('/api/community').then(res => res.ok ? res.json() : []).then(data => setPosts(data));
+    // 커뮤니티 포스트 로드 (localStorage)
+    try {
+      const stored = localStorage.getItem('lottoshrine_community_posts');
+      if (stored) setPosts(JSON.parse(stored));
+    } catch (e) {
+      console.error('Failed to load community posts:', e);
+    }
 
     // 매장 데이터 로드 (API 또는 정적 파일)
     fetch('/data/stores.json')

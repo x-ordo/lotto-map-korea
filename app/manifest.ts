@@ -5,6 +5,9 @@
 
 import { MetadataRoute } from 'next';
 
+// Required for static export
+export const dynamic = 'force-static';
+
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'LottoShrine - 로또 명당 지도',
