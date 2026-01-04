@@ -75,7 +75,7 @@ jobs:
       - name: Build application
         run: npm run build
         env:
-          NEXT_PUBLIC_KAKAO_MAPS_APP_KEY: ${{ secrets.KAKAO_MAPS_APP_KEY }}
+          NEXT_PUBLIC_KAKAO_MAPS_APP_KEY: ${{ secrets.NEXT_PUBLIC_KAKAO_MAPS_APP_KEY }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -109,7 +109,7 @@ jobs:
       - name: Build for Cloudflare Pages
         run: npm run build
         env:
-          NEXT_PUBLIC_KAKAO_MAPS_APP_KEY: ${{ secrets.KAKAO_MAPS_APP_KEY }}
+          NEXT_PUBLIC_KAKAO_MAPS_APP_KEY: ${{ secrets.NEXT_PUBLIC_KAKAO_MAPS_APP_KEY }}
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
@@ -146,7 +146,7 @@ jobs:
       - name: Build for Cloudflare Pages
         run: npm run build
         env:
-          NEXT_PUBLIC_KAKAO_MAPS_APP_KEY: ${{ secrets.KAKAO_MAPS_APP_KEY }}
+          NEXT_PUBLIC_KAKAO_MAPS_APP_KEY: ${{ secrets.NEXT_PUBLIC_KAKAO_MAPS_APP_KEY }}
 
       - name: Deploy Preview to Cloudflare Pages
         uses: cloudflare/pages-action@v1
