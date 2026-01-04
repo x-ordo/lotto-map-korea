@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { Plus, Trash2, QrCode, Save, ChevronRight, Hash } from 'lucide-react';
+import { Trash2, Save } from 'lucide-react';
 import { SavedLotto } from '../../../lib/types';
 
 export default function MyLotto() {
@@ -10,7 +10,15 @@ export default function MyLotto() {
     const [savedLottos, setSavedLottos] = useState<SavedLotto[]>([]);
 
     useEffect(() => {
-        fetchSaved();
+        let isMounted = true;
+        const fetchData = async () => {
+            const res = await fetch('/api/lotto');
+            if (res.ok && isMounted) {
+                setSavedLottos(await res.json());
+            }
+        };
+        fetchData();
+        return () => { isMounted = false; };
     }, []);
 
     const fetchSaved = async () => {

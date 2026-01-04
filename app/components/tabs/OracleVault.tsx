@@ -71,7 +71,7 @@ export default function OracleVault({ dailyOracle, continuity, onGenerate }: Pro
                         ))}
                     </div>
                     <div className="p-5 bg-zinc-50 rounded-2xl border border-zinc-100">
-                        <p className="text-[11px] text-zinc-600 font-bold leading-relaxed italic">"{dailyOracle.insights.split(': ')[1]}"</p>
+                        <p className="text-[11px] text-zinc-600 font-bold leading-relaxed italic">&ldquo;{dailyOracle.insights.split(': ')[1]}&rdquo;</p>
                     </div>
                 </div>
             )}

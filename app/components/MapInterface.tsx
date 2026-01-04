@@ -11,6 +11,7 @@ import CommunityWall from './tabs/CommunityWall';
 import InsightsDashboard from './tabs/InsightsDashboard';
 import OracleVault from './tabs/OracleVault';
 import MyLotto from './tabs/MyLotto';
+import StatisticsLibrary from './tabs/StatisticsLibrary';
 
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PointElement, LineElement, Filler } from 'chart.js';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PointElement, LineElement, Filler);
@@ -18,8 +19,8 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 declare global { interface Window { kakao: any; } }
 
 export default function MapInterface() {
-  // 🎯 Refactored Navigation: 3 Main Tabs
-  const [activeTab, setActiveTab] = useState<'PILGRIMAGE' | 'LAB' | 'WALL'>('PILGRIMAGE');
+  // 🎯 Refactored Navigation: 4 Main Tabs
+  const [activeTab, setActiveTab] = useState<'PILGRIMAGE' | 'LAB' | 'WALL' | 'DATA'>('PILGRIMAGE');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
   const [selectedStore, setSelectedStore] = useState<LotteryStore | null>(null);
@@ -90,88 +91,172 @@ export default function MapInterface() {
 
   return (
     <div className="flex flex-col h-screen bg-white font-sans text-zinc-950 overflow-hidden antialiased">
-      {/* 🔴 Persistent Results Hub */}
-      <div className="bg-zinc-950 text-white px-8 py-3 flex justify-between items-center z-[60] shrink-0 shadow-2xl">
+      {/* Skip to main content link for keyboard users */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-indigo-600 focus:text-white focus:rounded-lg focus:outline-none"
+      >
+        메인 콘텐츠로 건너뛰기
+      </a>
+
+      {/* Results Hub Header */}
+      <header
+        className="bg-zinc-950 text-white px-8 py-3 flex justify-between items-center z-[60] shrink-0 shadow-2xl"
+        role="banner"
+        aria-label="최신 당첨 결과"
+      >
         <div className="flex items-center space-x-4">
-            <span className="text-[10px] font-black bg-indigo-600 px-2 py-0.5 rounded tracking-tighter">1205회</span>
-            <div className="flex space-x-1.5 font-mono">
+            <span className="text-[10px] font-black bg-indigo-600 px-2 py-0.5 rounded tracking-tighter" aria-label="회차">1205회</span>
+            <div className="flex space-x-1.5 font-mono" role="list" aria-label="당첨 번호">
                 {[8, 16, 28, 30, 31, 44].map(n => (
-                    <span key={n} className="w-6 h-6 flex items-center justify-center bg-white/10 rounded-lg text-[10px] font-black">{n}</span>
+                    <span key={n} role="listitem" className="w-6 h-6 flex items-center justify-center bg-white/10 rounded-lg text-[10px] font-black">{n}</span>
                 ))}
-                <span className="text-white/30 px-0.5">+</span>
-                <span className="w-6 h-6 flex items-center justify-center bg-indigo-500/30 text-indigo-400 rounded-lg text-[10px] font-black">27</span>
+                <span className="text-white/30 px-0.5" aria-hidden="true">+</span>
+                <span className="w-6 h-6 flex items-center justify-center bg-indigo-500/30 text-indigo-400 rounded-lg text-[10px] font-black" aria-label="보너스 번호">27</span>
             </div>
         </div>
         <div className="flex items-center space-x-6">
-            <p className="hidden md:block text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Next Jackpot <span className="text-zinc-100 ml-2">2d 14:22:05</span></p>
-            <div className="h-4 w-px bg-white/10"></div>
-            <button className="p-1 hover:text-indigo-400 transition-colors"><User className="w-5 h-5" /></button>
+            <p className="hidden md:block text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+              Next Jackpot <time className="text-zinc-100 ml-2">2d 14:22:05</time>
+            </p>
+            <div className="h-4 w-px bg-white/10" aria-hidden="true"></div>
+            <button
+              className="p-1 hover:text-indigo-400 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-zinc-950 rounded-lg"
+              aria-label="사용자 프로필"
+            >
+              <User className="w-5 h-5" aria-hidden="true" />
+            </button>
         </div>
-      </div>
+      </header>
 
-      <nav className="bg-white/80 backdrop-blur-xl border-b border-zinc-100 px-8 flex justify-between items-center h-24 shrink-0 z-50">
+      <nav
+        className="bg-white/80 backdrop-blur-xl border-b border-zinc-100 px-8 flex justify-between items-center h-24 shrink-0 z-50"
+        role="navigation"
+        aria-label="메인 내비게이션"
+      >
         <div className="flex items-center space-x-4">
-            <div className="bg-zinc-950 p-2.5 rounded-2xl shadow-xl shadow-zinc-200"><Fingerprint className="text-white w-7 h-7" /></div>
+            <div className="bg-zinc-950 p-2.5 rounded-2xl shadow-xl shadow-zinc-200" aria-hidden="true">
+              <Fingerprint className="text-white w-7 h-7" />
+            </div>
             <h1 className="text-2xl font-black tracking-tighter">LottoShrine</h1>
         </div>
 
-        {/* 🎯 Diet Navigation (Action Oriented) */}
-        <div className="absolute left-1/2 -translate-x-1/2 flex space-x-2 bg-zinc-100/50 p-1.5 rounded-[24px]">
+        {/* Tab Navigation */}
+        <div
+          className="absolute left-1/2 -translate-x-1/2 flex space-x-2 bg-zinc-100/50 p-1.5 rounded-[24px]"
+          role="tablist"
+          aria-label="메인 탭 내비게이션"
+        >
             {[
                 { id: 'PILGRIMAGE', icon: MapIcon, label: '성지순례' },
                 { id: 'LAB', icon: Cpu, label: '추출연구소' },
                 { id: 'WALL', icon: Users, label: '담벼락' },
+                { id: 'DATA', icon: LayoutDashboard, label: '통계' },
             ].map(tab => (
-                <button 
-                    key={tab.id} 
-                    onClick={() => { setActiveTab(tab.id as any); setSelectedStore(null); }} 
-                    className={`px-8 py-3 rounded-[20px] flex items-center space-x-3 transition-all duration-300 ${activeTab === tab.id ? 'bg-white text-zinc-950 shadow-[0_8px_16px_rgba(0,0,0,0.08)] scale-105 font-black' : 'text-zinc-400 hover:text-zinc-600'}`}
+                <button
+                    key={tab.id}
+                    role="tab"
+                    aria-selected={activeTab === tab.id}
+                    aria-controls={`tabpanel-${tab.id}`}
+                    id={`tab-${tab.id}`}
+                    onClick={() => { setActiveTab(tab.id as any); setSelectedStore(null); }}
+                    className={`px-8 py-3 rounded-[20px] flex items-center space-x-3 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${activeTab === tab.id ? 'bg-white text-zinc-950 shadow-[0_8px_16px_rgba(0,0,0,0.08)] scale-105 font-black' : 'text-zinc-400 hover:text-zinc-600'}`}
                 >
-                    <tab.icon className={`w-5 h-5 ${activeTab === tab.id ? 'text-indigo-600' : ''}`} />
+                    <tab.icon className={`w-5 h-5 ${activeTab === tab.id ? 'text-indigo-600' : ''}`} aria-hidden="true" />
                     <span className="text-sm tracking-tight">{tab.label}</span>
                 </button>
             ))}
         </div>
 
         <div className="flex space-x-3">
-            <button onClick={() => setActiveTab('LAB')} className="hidden md:flex items-center space-x-2 px-5 py-2.5 bg-indigo-50 text-indigo-600 rounded-2xl font-black text-xs hover:bg-indigo-100 transition-all">
-                <Star className="w-4 h-4 fill-current" />
+            <button
+              onClick={() => setActiveTab('LAB')}
+              className="hidden md:flex items-center space-x-2 px-5 py-2.5 bg-indigo-50 text-indigo-600 rounded-2xl font-black text-xs hover:bg-indigo-100 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              aria-label="프리미엄 기능 사용하기"
+            >
+                <Star className="w-4 h-4 fill-current" aria-hidden="true" />
                 <span>Premium</span>
             </button>
         </div>
       </nav>
 
       <div className="flex-1 flex overflow-hidden relative">
-        <main className="flex-1 relative h-full">
+        <main id="main-content" className="flex-1 relative h-full" role="main">
             {activeTab === 'PILGRIMAGE' && (
-                <div className="h-full w-full relative bg-zinc-50 animate-in fade-in duration-700">
-                    <div id="map-container" className="h-full w-full opacity-90 grayscale-[0.1]"></div>
-                    {/* Simplified Sidebar */}
+                <div
+                  id="tabpanel-PILGRIMAGE"
+                  role="tabpanel"
+                  aria-labelledby="tab-PILGRIMAGE"
+                  className="h-full w-full relative bg-zinc-50 animate-in fade-in duration-700"
+                >
+                    <div id="map-container" className="h-full w-full opacity-90 grayscale-[0.1]" role="application" aria-label="로또 명당 지도"></div>
+                    {/* Sidebar */}
                     {!selectedStore && (
-                        <aside className={`absolute top-6 left-6 z-20 h-[calc(100%-3rem)] bg-white border border-zinc-200/60 rounded-[32px] shadow-2xl transition-all duration-500 ease-out ${isSidebarOpen ? 'w-full md:w-[420px]' : 'w-0 overflow-hidden'}`}>
+                        <aside
+                          className={`absolute top-6 left-6 z-20 h-[calc(100%-3rem)] bg-white border border-zinc-200/60 rounded-[32px] shadow-2xl transition-all duration-500 ease-out ${isSidebarOpen ? 'w-full md:w-[420px]' : 'w-0 overflow-hidden'}`}
+                          aria-label="매장 목록"
+                        >
                            <div className="flex flex-col h-full">
                               <div className="p-10 pb-6">
-                                <div className="flex justify-between items-center mb-8"><h2 className="text-3xl font-black tracking-tight">성지 탐색</h2><button onClick={() => setIsSidebarOpen(false)} className="p-3 bg-zinc-50 rounded-full hover:bg-zinc-100 transition-colors"><X className="w-6 h-6 text-zinc-400" /></button></div>
-                                <div className="relative group"><Search className="absolute left-5 top-5 text-zinc-300 w-6 h-6 group-focus-within:text-indigo-600 transition-colors" /><input type="text" placeholder="지역이나 매장 검색" className="w-full pl-14 pr-6 py-5 bg-zinc-50 border border-zinc-100 rounded-3xl text-lg focus:ring-4 focus:ring-indigo-500/10 font-black transition-all outline-none" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} /></div>
+                                <div className="flex justify-between items-center mb-8">
+                                  <h2 className="text-3xl font-black tracking-tight">성지 탐색</h2>
+                                  <button
+                                    onClick={() => setIsSidebarOpen(false)}
+                                    className="p-3 bg-zinc-50 rounded-full hover:bg-zinc-100 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    aria-label="사이드바 닫기"
+                                  >
+                                    <X className="w-6 h-6 text-zinc-400" aria-hidden="true" />
+                                  </button>
+                                </div>
+                                <div className="relative group">
+                                  <Search className="absolute left-5 top-5 text-zinc-300 w-6 h-6 group-focus-within:text-indigo-600 transition-colors" aria-hidden="true" />
+                                  <label htmlFor="store-search" className="sr-only">지역이나 매장 검색</label>
+                                  <input
+                                    id="store-search"
+                                    type="search"
+                                    placeholder="지역이나 매장 검색"
+                                    className="w-full pl-14 pr-6 py-5 bg-zinc-50 border border-zinc-100 rounded-3xl text-lg focus:ring-4 focus:ring-indigo-500/10 focus:outline-none font-black transition-all"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    aria-describedby="search-results-count"
+                                  />
+                                </div>
+                                <p id="search-results-count" className="sr-only">
+                                  {processedStores.length}개 매장 검색됨
+                                </p>
                               </div>
-                              <div className="flex-1 overflow-y-auto px-6 space-y-px scrollbar-hide pb-10">
+                              <ul className="flex-1 overflow-y-auto px-6 space-y-px scrollbar-hide pb-10" role="listbox" aria-label="매장 목록">
                                  {processedStores.map(s => (
-                                    <div key={`${s.id}-${s.address}`} onClick={() => setSelectedStore(s as any)} className="p-6 rounded-3xl hover:bg-zinc-50 cursor-pointer transition-all flex items-center space-x-5 group border border-transparent hover:border-zinc-100">
-                                        <div className="w-14 h-14 bg-zinc-100 rounded-2xl flex items-center justify-center text-zinc-400 font-black group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors text-xl">{s.winCount1st}</div>
-                                        <div className="flex-1 min-w-0"><h3 className="font-black text-lg truncate mb-1">{s.name}</h3><p className="text-xs text-zinc-400 truncate font-bold uppercase">{s.address}</p></div>
-                                        <ChevronRight className="w-6 h-6 text-zinc-200" />
-                                    </div>
+                                    <li key={`${s.id}-${s.address}`}>
+                                      <button
+                                        onClick={() => setSelectedStore(s as any)}
+                                        className="w-full p-6 rounded-3xl hover:bg-zinc-50 cursor-pointer transition-all flex items-center space-x-5 group border border-transparent hover:border-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-inset text-left"
+                                        aria-label={`${s.name}, ${s.address}, 1등 ${s.winCount1st}회 당첨`}
+                                      >
+                                        <div className="w-14 h-14 bg-zinc-100 rounded-2xl flex items-center justify-center text-zinc-400 font-black group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors text-xl" aria-hidden="true">{s.winCount1st}</div>
+                                        <div className="flex-1 min-w-0">
+                                          <h3 className="font-black text-lg truncate mb-1">{s.name}</h3>
+                                          <p className="text-xs text-zinc-400 truncate font-bold uppercase">{s.address}</p>
+                                        </div>
+                                        <ChevronRight className="w-6 h-6 text-zinc-200" aria-hidden="true" />
+                                      </button>
+                                    </li>
                                  ))}
-                              </div>
+                              </ul>
                            </div>
                         </aside>
                     )}
                 </div>
             )}
 
-            {/* 🧪 New: 'LAB' (Integrated Extraction + Stats + Vault) */}
+            {/* LAB Tab Panel */}
             {activeTab === 'LAB' && (
-                <div className="h-full overflow-y-auto bg-zinc-50 scrollbar-hide animate-in slide-in-from-bottom duration-700">
+                <div
+                  id="tabpanel-LAB"
+                  role="tabpanel"
+                  aria-labelledby="tab-LAB"
+                  className="h-full overflow-y-auto bg-zinc-50 scrollbar-hide animate-in slide-in-from-bottom duration-700"
+                >
                     <div className="max-w-7xl mx-auto py-16 px-10 space-y-16">
                         <header className="text-center space-y-4">
                             <h2 className="text-6xl font-black tracking-tighter text-zinc-950">STRATEGY LAB</h2>
@@ -228,13 +313,37 @@ export default function MapInterface() {
             )}
 
 
-            {activeTab === 'WALL' && <CommunityWall posts={posts} />}
+            {activeTab === 'WALL' && (
+              <div
+                id="tabpanel-WALL"
+                role="tabpanel"
+                aria-labelledby="tab-WALL"
+              >
+                <CommunityWall posts={posts} />
+              </div>
+            )}
+
+            {activeTab === 'DATA' && (
+              <div
+                id="tabpanel-DATA"
+                role="tabpanel"
+                aria-labelledby="tab-DATA"
+              >
+                <StatisticsLibrary />
+              </div>
+            )}
         </main>
       </div>
 
       {/* Floating Action for Lab Mobile */}
       <div className="fixed bottom-10 right-10 z-50 md:hidden">
-          <button onClick={() => setActiveTab('LAB')} className="bg-indigo-600 text-white w-20 h-20 rounded-[32px] shadow-2xl flex items-center justify-center animate-bounce hover:scale-110 active:scale-95 transition-all"><Zap className="w-10 h-10 fill-current" /></button>
+          <button
+            onClick={() => setActiveTab('LAB')}
+            className="bg-indigo-600 text-white w-20 h-20 rounded-[32px] shadow-2xl flex items-center justify-center animate-bounce hover:scale-110 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-indigo-300"
+            aria-label="추출연구소로 이동"
+          >
+            <Zap className="w-10 h-10 fill-current" aria-hidden="true" />
+          </button>
       </div>
     </div>
   );
