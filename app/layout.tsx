@@ -101,10 +101,10 @@ export default function RootLayout({
 
       </head>
       <body className="bg-slate-50 overflow-hidden antialiased">
-        {/* Kakao Maps SDK - loaded async */}
+        {/* Kakao Maps SDK - loaded after page is interactive */}
         <Script
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAPS_APP_KEY}&libraries=services,clusterer&autoload=false`}
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
         <ErrorBoundary>
           <ServiceWorkerProvider>
