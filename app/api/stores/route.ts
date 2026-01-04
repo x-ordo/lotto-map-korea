@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
-import { checkRateLimit, createSafeErrorResponse } from '../../../lib/validation';
+import { checkRateLimit, createSafeErrorResponse, validateStoresQuery } from '../../../lib/validation';
 
 // 캐시 설정: 1시간
 export const revalidate = 3600;
@@ -31,11 +31,17 @@ export async function GET(request: Request) {
       );
     }
 
-    // URL 파라미터 파싱
+    // URL 파라미터 검증 (Zod)
     const { searchParams } = new URL(request.url);
-    const search = searchParams.get('search')?.toLowerCase();
-    const limit = Math.min(parseInt(searchParams.get('limit') || '1000'), 1000);
-    const offset = parseInt(searchParams.get('offset') || '0');
+    const queryValidation = validateStoresQuery(searchParams);
+    if (!queryValidation.success) {
+      return NextResponse.json(
+        createSafeErrorResponse(queryValidation.error || '유효하지 않은 쿼리입니다.'),
+        { status: 400 }
+      );
+    }
+
+    const { search, limit, offset } = queryValidation.data!;
 
     // 캐시된 데이터 사용 또는 파일 로드
     const now = Date.now();
