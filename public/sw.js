@@ -13,12 +13,19 @@ const STATIC_ASSETS = [
   '/og-shrine.png',
 ];
 
-// Install event - cache static assets
+// Install event - cache static assets (with error handling)
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(STATIC_CACHE_NAME).then((cache) => {
+    caches.open(STATIC_CACHE_NAME).then(async (cache) => {
       console.log('[SW] Caching static assets');
-      return cache.addAll(STATIC_ASSETS);
+      // Cache each asset individually to handle failures gracefully
+      for (const asset of STATIC_ASSETS) {
+        try {
+          await cache.add(asset);
+        } catch (e) {
+          console.warn('[SW] Failed to cache:', asset);
+        }
+      }
     })
   );
   // Activate immediately

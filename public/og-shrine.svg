@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#18181b"/>
+  <rect x="50" y="50" width="1100" height="530" rx="32" fill="#4F46E5" opacity="0.1"/>
+  <text x="600" y="280" font-size="120" font-family="Arial Black" fill="white" text-anchor="middle">🎰 LottoShrine</text>
+  <text x="600" y="380" font-size="36" font-family="Arial" fill="#a1a1aa" text-anchor="middle">AI 로또 명당 성지순례</text>
+  <text x="600" y="450" font-size="24" font-family="Arial" fill="#71717a" text-anchor="middle">전국 1등 당첨 명당 지도 · 통계 분석 · AI 번호 추출</text>
+</svg>
