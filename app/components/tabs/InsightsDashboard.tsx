@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { TrendingUp, Flame, Activity, Zap, Coins, BarChart3, Binary, Dices } from 'lucide-react';
+import { TrendingUp, Flame } from 'lucide-react';
 import { Bar } from 'react-chartjs-2';
 
 interface Props {

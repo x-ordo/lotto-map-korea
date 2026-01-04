@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Heart, MessageCircle, Camera, MapPin, MoreHorizontal, Share2 } from 'lucide-react';
 import { CommunityPost } from '../../../lib/types';
 

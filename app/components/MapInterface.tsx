@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Search, X, ChevronRight, MapPin, Sparkles, Trophy, ListOrdered, Moon, MessageCircle, Download, Share2, Lock, Unlock, LocateFixed, Fingerprint, Cpu, Users, Star, Camera, LayoutDashboard, Info, Activity, Map as MapIcon, Coins, CheckCircle2, Package, Zap, Settings, User } from 'lucide-react';
-import { LotteryStore, LuckAnalysis, DreamInterpretation, TabType, CommunityPost, UserSubscription } from '../../lib/types';
+import { Search, X, ChevronRight, Fingerprint, Cpu, Users, Star, LayoutDashboard, Map as MapIcon, CheckCircle2, Zap, User } from 'lucide-react';
+import { LotteryStore, LuckAnalysis, CommunityPost } from '../../lib/types';
 import { generateDailyOracle } from '../../lib/luckEngine';
-import DREAM_DATA from '../../data/dream_mapping.json';
 
 // Import Refactored Tabs
 import CommunityWall from './tabs/CommunityWall';
@@ -26,11 +25,18 @@ export default function MapInterface() {
   const [selectedStore, setSelectedStore] = useState<LotteryStore | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   
-  const [posts, setPosts] = useState<CommunityPost[]>([]);
+  const [posts, setPosts] = useState<CommunityPost[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const stored = localStorage.getItem('lottoshrine_community_posts');
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
   const [dailyOracle, setDailyOracle] = useState<LuckAnalysis | null>(null);
   const [continuity] = useState(3);
   const [stores, setStores] = useState<LotteryStore[]>([]);
-  const [storesLoading, setStoresLoading] = useState(true);
   const mapRef = useRef<any>(null);
 
   useEffect(() => {
@@ -40,22 +46,12 @@ export default function MapInterface() {
         null, { enableHighAccuracy: true }
       );
     }
-    // 커뮤니티 포스트 로드 (localStorage)
-    try {
-      const stored = localStorage.getItem('lottoshrine_community_posts');
-      if (stored) setPosts(JSON.parse(stored));
-    } catch (e) {
-      console.error('Failed to load community posts:', e);
-    }
 
-    // 매장 데이터 로드 (API 또는 정적 파일)
+    // 매장 데이터 로드 (정적 파일)
     fetch('/data/stores.json')
       .then(res => res.ok ? res.json() : [])
-      .then(data => {
-        setStores(data);
-        setStoresLoading(false);
-      })
-      .catch(() => setStoresLoading(false));
+      .then(data => setStores(data))
+      .catch(() => setStores([]));
   }, []);
 
   const processedStores = useMemo(() => {

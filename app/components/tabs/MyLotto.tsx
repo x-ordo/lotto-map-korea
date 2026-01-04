@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Trash2, Save } from 'lucide-react';
 import { SavedLotto } from '../../../lib/types';
@@ -9,19 +9,15 @@ const STORAGE_KEY = 'lottoshrine_saved_lottos';
 
 export default function MyLotto() {
     const [numbers, setNumbers] = useState<number[]>([]);
-    const [savedLottos, setSavedLottos] = useState<SavedLotto[]>([]);
-
-    // Load from localStorage on mount
-    useEffect(() => {
+    const [savedLottos, setSavedLottos] = useState<SavedLotto[]>(() => {
+        if (typeof window === 'undefined') return [];
         try {
             const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
-                setSavedLottos(JSON.parse(stored));
-            }
-        } catch (e) {
-            console.error('Failed to load saved lottos:', e);
+            return stored ? JSON.parse(stored) : [];
+        } catch {
+            return [];
         }
-    }, []);
+    });
 
     // Save to localStorage helper
     const saveToStorage = useCallback((lottos: SavedLotto[]) => {

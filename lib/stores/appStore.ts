@@ -5,7 +5,7 @@
 
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import type { LotteryStore, LuckAnalysis, CommunityPost } from '../types';
+import type { LuckAnalysis } from '../types';
 
 // Tab types
 export type TabType = 'PILGRIMAGE' | 'LAB' | 'WALL' | 'DATA';

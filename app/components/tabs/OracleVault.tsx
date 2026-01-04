@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ShieldCheck, Calendar, Zap, Lock, Unlock, Share2, Award, History, Activity } from 'lucide-react';
+import { Zap, Activity } from 'lucide-react';
 import { LuckAnalysis } from '../../../lib/types';
 
 interface Props {

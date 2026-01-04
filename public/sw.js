@@ -3,7 +3,6 @@
  * Provides offline caching for static assets and API responses
  */
 
-const CACHE_NAME = 'lottoshrine-v1';
 const STATIC_CACHE_NAME = 'lottoshrine-static-v1';
 const DYNAMIC_CACHE_NAME = 'lottoshrine-dynamic-v1';
 
@@ -89,7 +88,7 @@ async function cacheFirstThenNetwork(request) {
       cache.put(request, response.clone());
     }
     return response;
-  } catch (error) {
+  } catch {
     console.log('[SW] Network failed, no cache:', request.url);
     // Return offline page if available
     return caches.match('/');
